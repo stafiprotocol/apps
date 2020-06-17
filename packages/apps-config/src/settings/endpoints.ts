@@ -82,25 +82,10 @@ function createLive (t: <T= string> (key: string, text: string, options: { ns: s
 function createTest (t: <T= string> (key: string, text: string, options: { ns: string }) => T): LinkOption[] {
   return [
     {
-      dnslink: 'westend',
-      info: 'westend',
-      text: t<string>('rpc.westend', 'Westend (Polkadot Testnet, hosted by Parity)', { ns: 'apps-config' }),
-      value: 'wss://westend-rpc.polkadot.io'
-    },
-    {
-      info: 'edgeware',
-      text: t<string>('rpc.berlin', 'Berlin (Edgeware Testnet, hosted by Commonwealth Labs)', { ns: 'apps-config' }),
-      value: 'wss://berlin1.edgewa.re'
-    },
-    {
-      info: 'substrate',
-      text: t<string>('rpc.flamingfir', 'Flaming Fir (Substrate Testnet, hosted by Parity)', { ns: 'apps-config' }),
-      value: 'wss://substrate-rpc.parity.io/'
-    },
-    {
-      info: 'nodle',
-      text: t<string>('rpc.arcadia', 'Arcadia (Nodle Testnet, hosted by Nodle)', { ns: 'apps-config' }),
-      value: 'wss://arcadia1.nodleprotocol.io/'
+      dnslink: 'stafi',
+      info: 'stafi',
+      text: t<string>('rpc.stafi', 'Stafi (Stafi Testnet, hosted by Stafi)', { ns: 'apps-config' }),
+      value: 'wss://stafi-node.wetez.io'
     }
   ];
 }
@@ -116,12 +101,12 @@ export default function create (t: <T= string> (key: string, text: string, optio
     (typeof window !== 'undefined' ? (window as EnvWindow).process_env?.WS_URL : undefined)
   );
   const endpoints = [
-    {
-      isHeader: true,
-      text: t<string>('rpc.header.live', 'Live networks', { ns: 'apps-config' }),
-      value: ''
-    },
-    ...createLive(t),
+    // {
+    //   isHeader: true,
+    //   text: t<string>('rpc.header.live', 'Live networks', { ns: 'apps-config' }),
+    //   value: ''
+    // },
+    // ...createLive(t),
     {
       isHeader: true,
       text: t<string>('rpc.header.test', 'Test networks', { ns: 'apps-config' }),
