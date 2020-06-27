@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import { AddressSmall, AddressInfo, Button, ChainLock, Icon, LinkExternal, Forget, Menu, Popup, Tags } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 import keyring from '@polkadot/ui-keyring';
-import { formatNumber } from '@polkadot/util';
+import { BN_ZERO, formatNumber } from '@polkadot/util';
 
 import Transfer from '../Accounts/modals/Transfer';
 import { useTranslation } from '../translate';
@@ -150,8 +150,8 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
     <tr className={className}>
       <td className='favorite'>
         <Icon
-          className={`${isFavorite ? 'isSelected isColorHighlight' : ''}`}
-          name={isFavorite ? 'star' : 'star outline'}
+          color={isFavorite ? 'orange' : 'gray'}
+          icon='star'
           onClick={_onFavorite}
         />
       </td>
@@ -184,7 +184,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
         </div>
       </td>
       <td className='number ui--media-1500'>
-        {balancesAll && formatNumber(balancesAll.accountNonce)}
+        {balancesAll?.accountNonce.gt(BN_ZERO) && formatNumber(balancesAll.accountNonce)}
       </td>
       <td className='number'>
         <AddressInfo
@@ -196,7 +196,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
       </td>
       <td className='button'>
         <Button
-          icon='paper plane'
+          icon='paper-plane'
           key='deposit'
           label={t<string>('deposit')}
           onClick={_toggleTransfer}
@@ -207,7 +207,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
           onClose={_toggleSettingPopup}
           trigger={
             <Button
-              icon='ellipsis vertical'
+              icon='ellipsis-v'
               onClick={_toggleSettingPopup}
             />
           }

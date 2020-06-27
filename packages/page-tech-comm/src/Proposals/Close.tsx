@@ -24,8 +24,7 @@ function Close ({ hasFailed, hash, idNumber, isDisabled, members, proposal }: Pr
   const { api } = useApi();
   const [isOpen, toggleOpen] = useToggle();
   const [accountId, setAccountId] = useState<string | null>(null);
-  const [proposalLength] = useState(proposal.encodedLength);
-  const proposalWeight = useWeight(proposal);
+  const [proposalWeight, proposalLength] = useWeight(proposal);
 
   return (
     <>
@@ -78,7 +77,7 @@ function Close ({ hasFailed, hash, idNumber, isDisabled, members, proposal }: Pr
         </Modal>
       )}
       <Button
-        icon='cancel'
+        icon='times'
         isDisabled={isDisabled}
         label={t<string>('Close')}
         onClick={toggleOpen}

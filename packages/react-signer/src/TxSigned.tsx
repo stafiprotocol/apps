@@ -2,13 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { SignerResult, SubmittableExtrinsic } from '@polkadot/api/types';
+import { SubmittableExtrinsic } from '@polkadot/api/types';
 import { SignerOptions } from '@polkadot/api/submittable/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { QueueTx, QueueTxMessageSetStatus } from '@polkadot/react-components/Status/types';
 import { Multisig, Timepoint } from '@polkadot/types/interfaces';
-import { SignerPayloadJSON } from '@polkadot/types/types';
-import { AddressProxy } from './types';
+import { AddressProxy, QrState } from './types';
 
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -20,9 +19,8 @@ import { useApi, useToggle } from '@polkadot/react-hooks';
 import { Option } from '@polkadot/types';
 import keyring from '@polkadot/ui-keyring';
 import { BN_ZERO, assert } from '@polkadot/util';
-import { blake2AsU8a } from '@polkadot/util-crypto';
 
-import ledgerSigner from './LedgerSigner';
+import { LedgerSigner, QrSigner } from './signers';
 import { useTranslation } from './translate';
 import Address from './Address';
 import Qr from './Qr';
@@ -35,15 +33,6 @@ interface Props {
   className?: string;
   currentItem: QueueTx;
   requestAddress: string;
-}
-
-interface QrState {
-  isQrHashed: boolean;
-  isQrVisible: boolean;
-  qrAddress: string;
-  qrPayload: Uint8Array;
-  qrResolve?: (result: SignerResult) => void;
-  qrReject?: (error: Error) => void;
 }
 
 const NOOP = () => undefined;
@@ -78,7 +67,11 @@ async function signAndSend (queueSetTxStatus: QueueTxMessageSetStatus, currentIt
   currentItem.txStartCb && currentItem.txStartCb();
 
   try {
-    const unsubscribe = await tx.signAndSend(pairOrAddress, options, handleTxResults('signAndSend', queueSetTxStatus, currentItem, (): void => {
+    await tx.signAsync(pairOrAddress, options);
+
+    queueSetTxStatus(currentItem.id, 'sending');
+
+    const unsubscribe = await tx.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, (): void => {
       unsubscribe();
     }));
   } catch (error) {
@@ -93,7 +86,9 @@ async function signAsync (queueSetTxStatus: QueueTxMessageSetStatus, { id, txFai
   txStartCb();
 
   try {
-    return (await tx.signAsync(pairOrAddress, options)).toJSON();
+    await tx.signAsync(pairOrAddress, options);
+
+    return tx.toJSON();
   } catch (error) {
     queueSetTxStatus(id, 'error', undefined, error);
 
@@ -101,27 +96,6 @@ async function signAsync (queueSetTxStatus: QueueTxMessageSetStatus, { id, txFai
   }
 
   return null;
-}
-
-function signQrPayload (setQrState: (state: QrState) => void): (payload: SignerPayloadJSON) => Promise<SignerResult> {
-  return (payload: SignerPayloadJSON): Promise<SignerResult> =>
-    new Promise((resolve, reject): void => {
-      // limit size of the transaction
-      const isQrHashed = (payload.method.length > 5000);
-      const wrapper = registry.createType('ExtrinsicPayload', payload, { version: payload.version });
-      const qrPayload = isQrHashed
-        ? blake2AsU8a(wrapper.toU8a(true))
-        : wrapper.toU8a();
-
-      setQrState({
-        isQrHashed,
-        isQrVisible: true,
-        qrAddress: payload.address,
-        qrPayload,
-        qrReject: reject,
-        qrResolve: resolve
-      });
-    });
 }
 
 async function wrapTx (api: ApiPromise, currentItem: QueueTx, { isMultiCall, multiRoot, proxyRoot, signAddress }: AddressProxy): Promise<SubmittableExtrinsic<'promise'>> {
@@ -134,6 +108,7 @@ async function wrapTx (api: ApiPromise, currentItem: QueueTx, { isMultiCall, mul
   if (multiRoot) {
     const multiModule = api.tx.multisig ? 'multisig' : 'utility';
     const info = await api.query[multiModule].multisigs<Option<Multisig>>(multiRoot, tx.method.hash);
+    const { weight } = await tx.paymentInfo(multiRoot);
     const { threshold, who } = extractExternal(multiRoot);
     const others = who.filter((w) => w !== signAddress);
     let timepoint: Timepoint | null = null;
@@ -143,12 +118,17 @@ async function wrapTx (api: ApiPromise, currentItem: QueueTx, { isMultiCall, mul
     }
 
     tx = isMultiCall
-      ? api.tx[multiModule].asMulti.meta.args.length === 5
+      ? api.tx[multiModule].asMulti.meta.args.length === 6
+        // We are doing toHex here since we have a Vec<u8> input
+        ? api.tx[multiModule].asMulti(threshold, others, timepoint, tx.method.toHex(), false, weight)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        ? api.tx[multiModule].asMulti(threshold, others, timepoint, tx.method, false)
         : api.tx[multiModule].asMulti(threshold, others, timepoint, tx.method)
-      : api.tx[multiModule].approveAsMulti(threshold, others, timepoint, tx.method.hash);
+      : api.tx[multiModule].approveAsMulti.meta.args.length === 5
+        ? api.tx[multiModule].approveAsMulti(threshold, others, timepoint, tx.method.hash, weight)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        : api.tx[multiModule].approveAsMulti(threshold, others, timepoint, tx.method.hash);
   }
 
   return tx;
@@ -159,9 +139,9 @@ async function extractParams (address: string, options: Partial<SignerOptions>, 
   const { meta: { isExternal, isHardware, isInjected, source } } = pair;
 
   if (isHardware) {
-    return ['signing', address, { ...options, signer: ledgerSigner }];
+    return ['signing', address, { ...options, signer: new LedgerSigner() }];
   } else if (isExternal) {
-    return ['qr', address, { ...options, signer: { signPayload: signQrPayload(setQrState) } }];
+    return ['qr', address, { ...options, signer: new QrSigner(setQrState) }];
   } else if (isInjected) {
     const injected = await web3FromSource(source as string);
 
@@ -178,7 +158,8 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
   const { t } = useTranslation();
   const { queueSetTxStatus } = useContext(StatusContext);
   const [flags, setFlags] = useState(extractExternal(requestAddress));
-  const [{ isQrHashed, isQrVisible, qrAddress, qrPayload, qrResolve }, setQrState] = useState<QrState>({ isQrHashed: false, isQrVisible: false, qrAddress: '', qrPayload: new Uint8Array() });
+  const [{ isQrHashed, qrAddress, qrPayload, qrResolve }, setQrState] = useState<QrState>({ isQrHashed: false, qrAddress: '', qrPayload: new Uint8Array() });
+  const [isBusy, setBusy] = useState(false);
   const [isRenderError, toggleRenderError] = useToggle();
   const [isSubmit, setIsSubmit] = useState(true);
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -237,8 +218,8 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
   );
 
   const _onSendPayload = useCallback(
-    (): void => {
-      if (_unlock() && senderInfo.signAddress && currentItem.payload) {
+    (queueSetTxStatus: QueueTxMessageSetStatus, currentItem: QueueTx, senderInfo: AddressProxy): void => {
+      if (senderInfo.signAddress && currentItem.payload) {
         const { id, payload, signerCb = NOOP } = currentItem;
         const pair = keyring.getPair(senderInfo.signAddress);
         const result = registry.createType('ExtrinsicPayload', payload, { version: payload.version }).sign(pair);
@@ -247,12 +228,12 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
         queueSetTxStatus(id, 'completed');
       }
     },
-    [_unlock, currentItem, queueSetTxStatus, senderInfo]
+    []
   );
 
   const _onSend = useCallback(
-    async (): Promise<void> => {
-      if (_unlock() && senderInfo.signAddress) {
+    async (queueSetTxStatus: QueueTxMessageSetStatus, currentItem: QueueTx, senderInfo: AddressProxy): Promise<void> => {
+      if (senderInfo.signAddress) {
         const [tx, [status, pairOrAddress, options]] = await Promise.all([
           wrapTx(api, currentItem, senderInfo),
           extractParams(senderInfo.signAddress, { tip }, setQrState)
@@ -263,12 +244,12 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
         await signAndSend(queueSetTxStatus, currentItem, tx, pairOrAddress, options);
       }
     },
-    [_unlock, api, currentItem, queueSetTxStatus, senderInfo, tip]
+    [api, tip]
   );
 
   const _onSign = useCallback(
-    async (): Promise<void> => {
-      if (_unlock() && senderInfo.signAddress) {
+    async (queueSetTxStatus: QueueTxMessageSetStatus, currentItem: QueueTx, senderInfo: AddressProxy): Promise<void> => {
+      if (senderInfo.signAddress) {
         const [tx, [, pairOrAddress, options]] = await Promise.all([
           wrapTx(api, currentItem, senderInfo),
           extractParams(senderInfo.signAddress, { ...signedOptions, tip }, setQrState)
@@ -277,14 +258,33 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
         setSignedTx(await signAsync(queueSetTxStatus, currentItem, tx, pairOrAddress, options));
       }
     },
-    [_unlock, api, currentItem, queueSetTxStatus, senderInfo, signedOptions, tip]
+    [api, signedOptions, tip]
+  );
+
+  const _doStart = useCallback(
+    (): void => {
+      setBusy(true);
+
+      setImmediate((): void => {
+        if (_unlock()) {
+          isSubmit
+            ? currentItem.payload
+              ? _onSendPayload(queueSetTxStatus, currentItem, senderInfo)
+              : _onSend(queueSetTxStatus, currentItem, senderInfo).catch(console.error)
+            : _onSign(queueSetTxStatus, currentItem, senderInfo).catch(console.error);
+        } else {
+          setBusy(false);
+        }
+      });
+    },
+    [_onSend, _onSendPayload, _onSign, _unlock, currentItem, isSubmit, queueSetTxStatus, senderInfo]
   );
 
   return (
     <>
       <Modal.Content className={className}>
         <ErrorBoundary onError={toggleRenderError}>
-          {isQrVisible
+          {(isBusy && flags.isQr)
             ? (
               <Qr
                 address={qrAddress}
@@ -338,13 +338,13 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
         </ErrorBoundary>
       </Modal.Content>
       <Modal.Actions onCancel={_onCancel}>
-        {!isQrVisible && (
+        {!isBusy && (
           <>
             <Button
               icon={
                 flags.isQr
                   ? 'qrcode'
-                  : 'sign-in'
+                  : 'sign-in-alt'
               }
               isDisabled={!senderInfo.signAddress || isRenderError}
               isPrimary
@@ -355,18 +355,12 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
                     ? t<string>('Sign and Submit')
                     : t<string>('Sign (no submission)')
               }
-              onClick={
-                isSubmit
-                  ? currentItem.payload
-                    ? _onSendPayload
-                    : _onSend
-                  : _onSign
-              }
+              onClick={_doStart}
               tabIndex={2}
             />
             <Toggle
               className='signToggle'
-              isDisabled={isQrVisible || !!currentItem.payload}
+              isDisabled={!!currentItem.payload}
               label={
                 isSubmit
                   ? t<string>('Sign and Submit')
