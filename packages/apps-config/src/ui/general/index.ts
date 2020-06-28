@@ -10,7 +10,7 @@ const chainPolkadot = '#e6007a';
 const chainKusama = '#000'; // '#d32e79';
 const chainWestend = '#da68a7';
 
-const nodeCentrifuge = '#fcc367';
+const nodeCentrifuge = '#00F3AB';
 const nodeEdgeware = '#0a95df';
 const nodeNodle = '#1ab394';
 

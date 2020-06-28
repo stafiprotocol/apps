@@ -8,7 +8,7 @@ import { css } from 'styled-components';
 export const colorBtnDefault = '#666';
 
 /* highlighted buttons, orange */
-export const colorBtnHighlight = '#f19135';
+export const colorBtnHighlight = '#00F3AB';
 
 /* primary buttons, blue */
 export const colorBtnPrimary = colorBtnDefault; // '#2e86ab';

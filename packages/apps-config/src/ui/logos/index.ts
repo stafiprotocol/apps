@@ -16,6 +16,7 @@ import nodeNodle from './nodes/nodle.svg';
 import nodePolkadot from './nodes/polkadot-circle.svg';
 import nodePolkadotJs from './nodes/polkadot-js.svg';
 import nodeSubstrate from './nodes/substrate-hexagon.svg';
+import nodeStafi from './nodes/stafi.png';
 
 // extensions
 import extensionPolkadotJs from './extensions/polkadot-js.svg';
@@ -47,7 +48,8 @@ const nodeLogos: Record<string, any> = [
   ['Nodle Chain Node', nodeNodle],
   ['parity-polkadot', nodePolkadot],
   ['polkadot-js', nodePolkadotJs],
-  ['substrate-node', nodeSubstrate]
+  ['substrate-node', nodeSubstrate],
+  ['Stafi Node', nodeStafi]
 ].reduce((logos, [node, logo]): Record<string, any> => ({
   ...logos,
   [(node as string).toLowerCase().replace(/-/g, ' ')]: logo

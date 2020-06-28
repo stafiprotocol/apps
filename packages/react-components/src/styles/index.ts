@@ -15,7 +15,7 @@ interface Props {
   uiHighlight?: string;
 }
 
-const defaultHighlight = '#f19135'; // #999
+const defaultHighlight = '#00F3AB'; // #999
 
 const getHighlight = (props: Props): string =>
   (props.uiHighlight || defaultHighlight);
