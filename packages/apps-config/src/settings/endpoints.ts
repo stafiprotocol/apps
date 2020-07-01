@@ -82,10 +82,10 @@ function createLive (t: <T= string> (key: string, text: string, options: { ns: s
 function createTest (t: <T= string> (key: string, text: string, options: { ns: string }) => T): LinkOption[] {
   return [
     {
-      dnslink: 'stafi',
-      info: 'stafi',
-      text: t<string>('rpc.stafi', 'Stafi (Stafi Testnet, hosted by Stafi)', { ns: 'apps-config' }),
-      value: 'wss://stafi-node.wetez.io'
+      dnslink: 'seiya',
+      info: 'seiya',
+      text: t<string>('rpc.seiya', 'Seiya (Stafi Public Testnet, hosted by Stafi)', { ns: 'apps-config' }),
+      value: 'wss://stafi-seiya.stafi.io'
     }
   ];
 }
