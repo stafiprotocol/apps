@@ -88,6 +88,12 @@ function createTest (t: TFn): LinkOption[] {
       info: 'seiya',
       text: t<string>('rpc.seiya', 'Seiya (Stafi Public Testnet, hosted by Stafi)', { ns: 'apps-config' }),
       value: 'wss://stafi-seiya.stafi.io'
+    },
+    {
+      dnslink: 'sitara',
+      info: 'sitara',
+      text: t<string>('rpc.sitara', 'Sitara (Stafi Incentivized Testnet, hosted by Stafi)', { ns: 'apps-config' }),
+      value: 'wss://stafi-sitara.stafi.io'
     }
   ];
 }

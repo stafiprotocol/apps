@@ -10,7 +10,7 @@ import appSettings from '@polkadot/ui-settings';
 
 import template from './123code';
 import accounts from './accounts';
-import claims from './claims';
+// import claims from './claims';
 import contracts from './contracts';
 import council from './council';
 // import dashboard from './dashboard';
@@ -37,7 +37,7 @@ export default function create (t: <T = string> (key: string, text: string, opti
       // dashboard,
       explorer(t),
       accounts(t),
-      claims(t),
+      // claims(t),
       transfer(t),
       genericAsset(t),
       null,
@@ -52,7 +52,7 @@ export default function create (t: <T = string> (key: string, text: string, opti
       // dashboard(t),
       explorer(t),
       accounts(t),
-      claims(t),
+      // claims(t),
       transfer(t),
       genericAsset(t),
       null,
