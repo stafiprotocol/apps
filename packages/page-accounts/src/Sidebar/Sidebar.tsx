@@ -24,8 +24,7 @@ interface Props {
 
 function Sidebar ({ address, className = '', onClose, onUpdateName }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { flags, identity, isEditingName, isEditingTags, meta, name, onForgetAddress, onSaveName, onSaveTags, setName, setTags, tags, toggleIsEditingName, toggleIsEditingTags } = useAccountInfo(address);
-  const [isHoveringButton, toggleIsHoveringButton] = useToggle();
+  const { accountIndex, flags, identity, isEditingName, isEditingTags, meta, name, onForgetAddress, onSaveName, onSaveTags, setName, setTags, tags, toggleIsEditingName, toggleIsEditingTags } = useAccountInfo(address);
   const [isTransferOpen, toggleIsTransferOpen] = useToggle();
 
   const _onForgetAddress = useCallback(
@@ -61,6 +60,11 @@ function Sidebar ({ address, className = '', onClose, onUpdateName }: Props): Re
         <div className='ui--AddressMenu-addr'>
           {address}
         </div>
+        {accountIndex && (
+          <div className='ui--AddressMenu-addr'>
+            {accountIndex}
+          </div>
+        )}
         <AccountName
           onClick={(flags.isEditable && !isEditingName) ? toggleIsEditingName : undefined}
           override={
@@ -105,53 +109,30 @@ function Sidebar ({ address, className = '', onClose, onUpdateName }: Props): Re
           <Button.Group>
             <Button
               icon='paper-plane'
-              label={t<string>('Deposit')}
+              label={t<string>('Send')}
               onClick={toggleIsTransferOpen}
             />
             {flags.isOwned && (
               <Button
-                className='basic'
                 icon='check'
-                isPrimary
+                isBasic
                 label={t<string>('Owned')}
-                onMouseEnter={toggleIsHoveringButton}
-                onMouseLeave={toggleIsHoveringButton}
-                size='tiny'
               />
             )}
             {!flags.isOwned && !flags.isInContacts && (
               <Button
                 icon='plus'
-                isPositive
                 label={t<string>('Save')}
                 onClick={_onUpdateName}
-                onMouseEnter={toggleIsHoveringButton}
-                onMouseLeave={toggleIsHoveringButton}
-                size='tiny'
               />
             )}
             {!flags.isOwned && flags.isInContacts && (
               <Button
-                className={`ui--AddressMenu-button icon ${isHoveringButton ? '' : 'basic'}`}
-                isAnimated
-                isNegative={isHoveringButton}
-                isPositive={!isHoveringButton}
+                className='ui--AddressMenu-button'
+                icon='ban'
+                label={t<string>('Remove')}
                 onClick={_onForgetAddress}
-                onMouseEnter={toggleIsHoveringButton}
-                onMouseLeave={toggleIsHoveringButton}
-                size='tiny'
-              >
-                <Button.Content visible>
-                  <Icon icon='check' />
-                  &nbsp;
-                  {t<string>('Saved')}
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon icon='ban' />
-                  &nbsp;
-                  {t<string>('Remove')}
-                </Button.Content>
-              </Button>
+              />
             )}
           </Button.Group>
           {isTransferOpen && (
@@ -202,8 +183,6 @@ export default React.memo(styled(Sidebar)`
     position: absolute;
     right: 0.5rem;
     top: 0.5rem;
-    font-size: 1.2rem;
-    padding: 0.6rem !important;
   }
 
   .ui--AddressMenu-header {
@@ -215,26 +194,19 @@ export default React.memo(styled(Sidebar)`
     justify-content: center;
     margin: -1rem -1rem 1rem -1rem;
     padding: 1rem;
-
-    .ui.button {
-      transition: 0.5s all;
-
-      &.secondary {
-        background-color: #666;
-      }
-    }
-
-    .ui.button+.ui.button {
-      margin-left: 0.5rem !important;
-    }
   }
 
   .ui--AddressMenu-addr {
     font-family: monospace;
     margin: 0.5rem 0;
     overflow: hidden;
+    text-align: center;
     text-overflow: ellipsis;
     width: 100%;
+  }
+
+  .ui--AddressMenu-addr+.ui--AddressMenu-addr {
+    margin-top: -0.25rem;
   }
 
   section {

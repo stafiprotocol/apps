@@ -6,8 +6,11 @@ import BN from 'bn.js';
 
 export default {
   chains: {
+    Edgeware: 'edgeware',
+    Kulupu: 'kulupu',
     Kusama: 'kusama',
     'Kusama CC3': 'kusama',
+    Polkadot: 'polkadot',
     'Polkadot CC1': 'polkadot-cc1',
     Westend: 'westend'
   },

@@ -46,8 +46,7 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
     transform: (status: ElectionStatus) => status.isOpen
   });
   const hasQueries = useMemo(
-    (): boolean =>
-      hasAccounts && !!(api.query.imOnline?.authoredBlocks) && !!(api.query.staking.activeEra),
+    () => hasAccounts && !!(api.query.imOnline?.authoredBlocks) && !!(api.query.staking.activeEra),
     [api, hasAccounts]
   );
   const items = useMemo(() => [
@@ -133,7 +132,6 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
         </Route>
         <Route path={`${basePath}/waiting`}>
           <Overview
-            className={`${basePath}/waiting` === pathname ? '' : 'staking--hidden'}
             favorites={favorites}
             hasQueries={hasQueries}
             isIntentions

@@ -2,17 +2,24 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { TFunction } from 'i18next';
 import { Option } from './types';
 
-export default function create (t: <T= string> (key: string, text: string, options: { ns: string }) => T): Option[] {
+export default function create (t: TFunction): Option[] {
   return [
     {
       text: t<string>('lng.detect', 'Default browser language (auto-detect)', { ns: 'apps-config' }),
       value: 'default'
     },
+    // default/native
     {
       text: 'English',
       value: 'en'
+    },
+    // translations (sorted by language code)
+    {
+      text: 'عربى',
+      value: 'ar'
     },
     {
       text: 'Español',

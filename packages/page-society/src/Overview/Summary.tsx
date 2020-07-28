@@ -35,7 +35,7 @@ function Summary ({ className = '', info }: Props): React.ReactElement<Props> {
       <section className='ui--media-medium'>
         {info && members && (
           <CardSummary label={t<string>('members')}>
-            {members.length}/{info.maxMembers.toString()}
+            {members.length}&nbsp;/&nbsp;{info.maxMembers.toString()}
           </CardSummary>
         )}
       </section>
@@ -81,8 +81,7 @@ export default React.memo(styled(Summary)`
   .society--header--account {
     white-space: nowrap;
 
-    .ui--AccountName,
-    .ui--IdentityIcon {
+    .ui--AccountName {
       display: inline-block;
     }
 

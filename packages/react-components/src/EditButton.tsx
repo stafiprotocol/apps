@@ -16,10 +16,9 @@ interface Props {
   className?: string;
   icon?: IconName;
   onClick: VoidFn;
-  size?: 'mini' | 'tiny' | 'small' | 'large' | 'big' | 'huge' | 'massive';
 }
 
-function EditButton ({ children, className, icon = 'edit', onClick, size = 'small' }: Props): React.ReactElement<Props> {
+function EditButton ({ children, className, icon = 'edit', onClick }: Props): React.ReactElement<Props> {
   return (
     <div
       className={className}
@@ -30,8 +29,6 @@ function EditButton ({ children, className, icon = 'edit', onClick, size = 'smal
         <Icon
           className='icon-button'
           icon={icon}
-          isPrimary
-          size={size}
         />
       </span>
     </div>

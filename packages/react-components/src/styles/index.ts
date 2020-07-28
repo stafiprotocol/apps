@@ -27,12 +27,15 @@ export default createGlobalStyle<Props>`
     color: ${getHighlight} !important;
   }
 
+  .ui--highlight--before:before {
+    background: ${getHighlight} !important;
+  }
+
   .ui--highlight--bg {
     background: ${getHighlight} !important;
   }
 
   .ui--highlight--border {
-    /* .theme--default .ui.menu.tabular > .item.active */
     border-color: ${getHighlight} !important;
   }
 
@@ -45,7 +48,7 @@ export default createGlobalStyle<Props>`
   }
 
   .ui--highlight--gradient {
-    background: ${(props: Props): string => `linear-gradient(90deg, ${props.uiHighlight || defaultHighlight}, transparent)`};
+    background: ${(props: Props) => `linear-gradient(90deg, ${props.uiHighlight || defaultHighlight}, transparent)`};
   }
 
   .ui--highlight--icon {
@@ -58,13 +61,54 @@ export default createGlobalStyle<Props>`
     stroke: ${getHighlight} !important;
   }
 
-  .theme--default {
-    .ui.menu.tabular .item.active {
-      border-color: ${getHighlight} !important;
+  .ui--Button {
+    &:not(.isDisabled):not(.isIcon):not(.isBasic) {
+      .ui--Icon {
+        background: ${getHighlight};
+        color: #f5f5f4;
+      }
     }
 
-    .ui.blue.progress > .bar {
-      background-color: ${getHighlight} !important;
+    &.isBasic:not(.isDisabled):not(.isIcon):not(.isSelected) {
+      &:not(.isReadOnly) {
+        box-shadow: 0 0 1px ${getHighlight};
+      }
+
+      .ui--Icon {
+        color: ${getHighlight};
+      }
+    }
+
+    &.isSelected {
+      box-shadow: 0 0 1px ${getHighlight};
+    }
+
+    &:hover:not(.isDisabled):not(.isReadOnly),
+    &.isSelected {
+      background: ${getHighlight};
+      color: #f5f5f4;
+      text-shadow: none;
+
+      &:not(.isIcon) {
+        .ui--Icon {
+          color: inherit;
+        }
+      }
+    }
+  }
+
+  .ui--Table td .ui--Button {
+    &:not(.isDisabled):not(.isIcon) {
+      .ui--Icon {
+        background: transparent;
+        color: ${getHighlight};
+      }
+    }
+  }
+
+  .theme--default {
+    .ui--Tabs-Tab.tabLinkActive {
+      border-bottom-color: ${getHighlight};
     }
 
     .ui.negative.button,
@@ -84,10 +128,11 @@ export default createGlobalStyle<Props>`
       }
     }
 
-    .ui.toggle.checkbox {
-      input:checked~.box:before,
-      input:checked~label:before {
-        background-color: ${getHighlight} !important;
+    .ui--Toggle.isChecked .ui--Toggle-Slider {
+      background-color: ${getHighlight} !important;
+
+      &:before {
+        border-color: ${getHighlight} !important;
       }
     }
   }
@@ -111,30 +156,6 @@ export default createGlobalStyle<Props>`
     padding: 1.25rem;
     position: relative;
     text-align: left;
-
-    &:hover {
-      /* box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
-      /* box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-      border-color: transparent; */
-    }
-
-    &:not(:hover) {
-      .ui.button:not(.disabled) {
-        background: #eee !important;
-        color: #555 !important;
-      }
-
-      .ui.toggle.checkbox {
-        input:checked~.box:before,
-        input:checked~label:before {
-          background-color: #eee !important;
-        }
-      }
-
-      .ui.button.show-on-hover {
-        visibility: hidden;
-      }
-    }
 
     > ul {
       margin: 0;

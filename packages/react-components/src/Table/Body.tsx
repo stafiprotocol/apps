@@ -33,7 +33,6 @@ export default React.memo(styled(Body)`
   background: white;
 
   td {
-    // border-top: 1px solid #e4e6e8;
     padding: 0.75rem 1rem;
     text-align: left;
     vertical-align: middle;
@@ -49,10 +48,6 @@ export default React.memo(styled(Body)`
     label {
       display: block !important;
       white-space: nowrap;
-    }
-
-    .ui--Icon {
-      cursor: pointer;
     }
 
     div.empty {
@@ -84,10 +79,6 @@ export default React.memo(styled(Body)`
 
       > * {
         vertical-align: middle;
-      }
-
-      .ui.button {
-        margin-right: 0;
       }
     }
 
@@ -140,22 +131,16 @@ export default React.memo(styled(Body)`
     &.favorite .ui--Icon.isSelected {
       color: darkorange;
     }
+
+    .ui--Button-Group .ui--Button {
+      margin: 0;
+    }
   }
 
   tr {
     &:nth-child(even) {
       background: #f9f8f7;
     }
-
-    // &.isHighlight {
-    //   &:nth-child(even) td {
-    //     background: #fffff4;
-    //   }
-
-    //   &:nth-child(odd) td {
-    //     background: #f4ffff;
-    //   }
-    // }
 
     &:first-child td {
       border-top: 1px solid #e4e6e8;
@@ -185,21 +170,10 @@ export default React.memo(styled(Body)`
       }
     }
 
-    .ui.button:not(.isIcon):not(:hover) {
-      color: #555 !important;
-
-      &:not(.basic) {
-        background: transparent !important;
-      }
-
-      &.basic {
-        background: transparent !important;
-        box-shadow: none !important;
-      }
-    }
-
-    .ui.button+.ui.button {
-      margin-left: 0rem;
+    .ui--Button:not(.isIcon):not(:hover) {
+      background: transparent !important;
+      box-shadow: none !important;
+      // color: #555 !important;
     }
 
     .ui.toggle.checkbox input:checked~.box:before,
