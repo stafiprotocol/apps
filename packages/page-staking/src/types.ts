@@ -61,10 +61,13 @@ export interface ValidatorInfo extends ValidatorInfoRank {
 export type TargetSortBy = keyof ValidatorInfoRank;
 
 export interface SortedTargets {
+  avgStaked?: BN;
   calcWith?: BN;
   lastReward?: BN;
+  lowStaked?: BN;
   nominators?: string[];
   setCalcWith: (amount?: BN) => void;
   totalStaked?: BN;
   validators?: ValidatorInfo[];
+  validatorIds?: string[];
 }

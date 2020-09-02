@@ -11,9 +11,10 @@ import { Option } from './types';
 //   value: The actual ss5Format value (as registered)
 export default function create (t: TFunction): Option[] {
   return [
+    // base defaults
     {
       info: 'stafi',
-      text: t<string>('ss58.stafi', 'Stafi (Testnet)', { ns: 'apps-config' }),
+      text: t<string>('ss58.stafi', 'Stafi', { ns: 'apps-config' }),
       value: 20
     }
   ];

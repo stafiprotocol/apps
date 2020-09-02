@@ -9,30 +9,56 @@ import { Button } from '@polkadot/react-components';
 interface Props {
   className?: string;
   onChange: (index: number) => void;
-  options: { text: string, value: number }[];
+  options: { isDisabled?: boolean, text: string, value: number }[];
   selected: number;
 }
 
-function PayToggle ({ className = '', onChange, options, selected }: Props): React.ReactElement<Props> | null {
+interface ToggleProps {
+  index: number;
+  isDisabled?: boolean;
+  isSelected: boolean;
+  onChange: (index: number) => void;
+  text: string;
+}
+
+function ToggleIndex ({ index, isDisabled, isSelected, onChange, text }: ToggleProps): React.ReactElement<ToggleProps> {
   const _onClick = useCallback(
-    (index: number) => () => onChange(index),
-    [onChange]
+    (): void => {
+      !isDisabled && onChange(index);
+    },
+    [isDisabled, index, onChange]
   );
 
+  return (
+    <Button
+      icon={isSelected ? 'check' : 'circle'}
+      isBasic
+      isDisabled={isDisabled}
+      isSelected={isSelected}
+      key={text}
+      label={text}
+      onClick={_onClick}
+    />
+  );
+}
+
+const ToggleIndexMemo = React.memo(ToggleIndex);
+
+function PayToggle ({ className = '', onChange, options, selected }: Props): React.ReactElement<Props> | null {
   if (!options.length || !options[0].value) {
     return null;
   }
 
   return (
     <div className={`ui--ToggleButton ${className}`}>
-      {options.map(({ text }, index): React.ReactNode => (
-        <Button
-          icon={selected === index ? 'check' : 'circle'}
-          isBasic
+      {options.map(({ isDisabled, text }, index): React.ReactNode => (
+        <ToggleIndexMemo
+          index={index}
+          isDisabled={isDisabled}
           isSelected={selected === index}
-          key={text}
-          label={text}
-          onClick={_onClick(index)}
+          key={index}
+          onChange={onChange}
+          text={text}
         />
       ))}
     </div>
@@ -54,6 +80,10 @@ export default React.memo(styled(PayToggle)`
     &:not(:last-child) {
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
+    }
+
+    .ui--Icon {
+      width: 1em;
     }
   }
 `);

@@ -11,7 +11,7 @@ import Spinner from '../Spinner';
 interface Props {
   children?: React.ReactNode;
   className?: string;
-  empty?: React.ReactNode;
+  empty?: React.ReactNode | false;
   emptySpinner?: React.ReactNode;
 }
 
@@ -30,8 +30,6 @@ function Body ({ children, className = '', empty, emptySpinner }: Props): React.
 }
 
 export default React.memo(styled(Body)`
-  background: white;
-
   td {
     padding: 0.75rem 1rem;
     text-align: left;
@@ -69,11 +67,11 @@ export default React.memo(styled(Body)`
     }
 
     &.badge {
-      padding: 0;
+      padding: 0.5rem;
     }
 
     &.button {
-      padding: 0.5rem 0.25rem;
+      padding: 0.5rem;
       text-align: right;
       white-space: nowrap;
 
@@ -86,8 +84,22 @@ export default React.memo(styled(Body)`
       border-top-width: 0;
     }
 
+    &.expand {
+      text-align: left;
+
+      .ui--Expander+.ui--Expander {
+        margin-top: 0.5rem;
+      }
+    }
+
     &.hash {
       font-family: monospace;
+    }
+
+    &.links {
+      padding: 0.5rem 0.75rem;
+      text-align: center;
+      width: 0;
     }
 
     &.number {
@@ -139,7 +151,11 @@ export default React.memo(styled(Body)`
 
   tr {
     &:nth-child(even) {
-      background: #f9f8f7;
+      background: #faf8f6;
+    }
+
+    &:nth-child(odd) {
+      background: white;
     }
 
     &:first-child td {
@@ -170,10 +186,13 @@ export default React.memo(styled(Body)`
       }
     }
 
+    &.transparent {
+      background: transparent;
+    }
+
     .ui--Button:not(.isIcon):not(:hover) {
       background: transparent !important;
       box-shadow: none !important;
-      // color: #555 !important;
     }
 
     .ui.toggle.checkbox input:checked~.box:before,

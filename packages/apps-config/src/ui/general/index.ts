@@ -5,17 +5,29 @@
 const defaultColor = undefined; // '#f19135'
 const emptyColor = '#999';
 
+const chainCrab = '#7C30DD';
 const chainKulupu = '#003366';
 const chainPolkadot = '#e6007a';
 const chainKusama = '#000'; // '#d32e79';
+const chainRocco = '#6f36dc';
+const chainRoccoTick = '#22bb22';
+const chainRoccoTrack = '#bb2222';
+const chainRoccoTrick = '#2222bb';
+const chainRoccoAcala = '#173DC9';
+const chainRoccoDarwinia = '#7C30DD';
+const laminarRoccoAcala = '#004FFF';
 const chainWestend = '#da68a7';
+const chainPhala = '#4dc56a';
 
 const nodeCentrifuge = '#00F3AB';
 const nodeEdgeware = '#0a95df';
 const nodeNodle = '#1ab394';
+const nodeKilt = '#eb5b2a';
+const nodeSubsocial = '#b9018c';
 
 // overrides based on the actual matched chain name
 const chainColors: Record<string, any> = [
+  ['Crab', chainCrab],
   ['Kulupu', chainKulupu],
   ['Kusama', chainKusama],
   ['Kusama CC1', chainKusama],
@@ -23,7 +35,15 @@ const chainColors: Record<string, any> = [
   ['Kusama CC3', chainKusama],
   ['Polkadot', chainPolkadot],
   ['Polkadot CC1', chainPolkadot],
-  ['Westend', chainWestend]
+  ['Rococo', chainRocco],
+  ['Tick', chainRoccoTick],
+  ['Track', chainRoccoTrack],
+  ['Trick', chainRoccoTrick],
+  ['acala mandala pc1', chainRoccoAcala],
+  ['darwinia parachain', chainRoccoDarwinia],
+  ['laminar turbulence pc1', laminarRoccoAcala],
+  ['Westend', chainWestend],
+  ['phala poc 2', chainPhala]
 ].reduce((colors, [chain, color]): Record<string, any> => ({
   ...colors,
   [chain.toLowerCase()]: color
@@ -33,7 +53,9 @@ const chainColors: Record<string, any> = [
 const nodeColors: Record<string, any> = [
   ['centrifuge chain', nodeCentrifuge],
   ['edgeware node', nodeEdgeware],
-  ['nodle chain node', nodeNodle]
+  ['kilt node', nodeKilt],
+  ['nodle chain node', nodeNodle],
+  ['subsocial node', nodeSubsocial]
   // ['node template', emptyColor],
   // ['parity polkadot', emptyColor],
   // ['substrate node', emptyColor]

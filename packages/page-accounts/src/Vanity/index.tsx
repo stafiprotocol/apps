@@ -15,7 +15,7 @@ import generator from '@polkadot/vanitygen/generator';
 import matchRegex from '@polkadot/vanitygen/regex';
 import generatorSort from '@polkadot/vanitygen/sort';
 
-import CreateModal from '../Accounts/modals/Create';
+import CreateModal from '../modals/Create';
 import { useTranslation } from '../translate';
 import Match from './Match';
 
@@ -232,20 +232,23 @@ function VanityApp ({ className = '', onStatusChange }: Props): React.ReactEleme
         />
       </Button.Group>
       {matches.length !== 0 && (
-        <Table
-          className='vanity--App-matches'
-          empty={t<string>('No matches found')}
-          header={header}
-        >
-          {matches.map((match): React.ReactNode => (
-            <Match
-              {...match}
-              key={match.address}
-              onCreateToggle={setCreateSeed}
-              onRemove={_onRemove}
-            />
-          ))}
-        </Table>
+        <>
+          <article className='warning nomargin'>{t<string>('Ensure that you utilized the "Save" functionality before using a generated address to receive funds. Without saving the address any funds and the associated seed any funds sent to it will be lost.')}</article>
+          <Table
+            className='vanity--App-matches'
+            empty={t<string>('No matches found')}
+            header={header}
+          >
+            {matches.map((match): React.ReactNode => (
+              <Match
+                {...match}
+                key={match.address}
+                onCreateToggle={setCreateSeed}
+                onRemove={_onRemove}
+              />
+            ))}
+          </Table>
+        </>
       )}
       {createSeed && (
         <CreateModal

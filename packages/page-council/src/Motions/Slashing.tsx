@@ -6,11 +6,10 @@ import { SubmittableExtrinsic } from '@polkadot/api/types';
 
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Input, InputAddress, Modal, TxButton } from '@polkadot/react-components';
-import { useApi, useToggle } from '@polkadot/react-hooks';
+import { useApi, useAvailableSlashes, useToggle } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../translate';
-import { getThreshold } from './thresholds';
-import useAvailableSlashes from './useAvailableSlashes';
+import { getSlashThreshold } from '../thresholds';
 
 interface Props {
   className?: string;
@@ -37,7 +36,8 @@ function Slashing ({ className = '', isMember, members }: Props): React.ReactEle
   const [{ proposal, proposalLength }, setProposal] = useState<ProposalState>({ proposal: null, proposalLength: 0 });
   const [eras, setEras] = useState<Option[]>([]);
   const [selectedEra, setSelectedEra] = useState(0);
-  const threshold = Math.ceil((members.length || 0) * getThreshold(api));
+
+  const threshold = Math.ceil((members.length || 0) * getSlashThreshold(api));
 
   useEffect((): void => {
     setEras(
