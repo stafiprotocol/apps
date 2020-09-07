@@ -6,7 +6,7 @@ import { Routes } from './types';
 
 import accounts from './accounts';
 import addresses from './addresses';
-import calendar from './calendar';
+// import calendar from './calendar';
 // import claims from './claims';
 import contracts from './contracts';
 import council from './council';
@@ -46,7 +46,7 @@ export default function create (t: <T = string> (key: string, text: string, opti
     techcomm(t),
     parachains(t),
     society(t),
-    calendar(t),
+    // calendar(t),
     contracts(t),
     storage(t),
     extrinsics(t),
