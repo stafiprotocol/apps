@@ -5,7 +5,5 @@
 /* eslint-disable sort-keys */
 
 export default {
-  Address: 'AccountId',
-  LookupSource: 'AccountId',
   RefCount: 'u8'
 };
