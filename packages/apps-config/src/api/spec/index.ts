@@ -48,5 +48,6 @@ export default {
   'stable-poc': stablePoc,
   stable_poc: stablePoc,
   stafi,
+  node: stafi,
   subsocial
 };
