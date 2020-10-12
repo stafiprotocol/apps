@@ -1,6 +1,5 @@
 // Copyright 2017-2020 @polkadot/react-components authors & contributors
-// This software may be modified and distributed under the terms
-// of the Apache-2.0 license. See the LICENSE file for details.
+// SPDX-License-Identifier: Apache-2.0
 
 import { DeriveBalancesAll, DeriveDemocracyLock, DeriveStakingAccount } from '@polkadot/api-derive/types';
 import { BlockNumber, LockIdentifier, ValidatorPrefsTo145 } from '@polkadot/types/interfaces';
@@ -273,10 +272,14 @@ function renderBalances (props: Props, allAccounts: string[], bestNumber: BlockN
                 <div>
                   {formatBalance(balancesAll.vestedClaimable, { forceUnit: '-' })}
                   <div className='faded'>{t('available to be unlocked')}</div>
-                  <BlockToTime blocks={balancesAll.vestingEndBlock.sub(bestNumber)} />
-                  <div className='faded'>{t('until block')} {formatNumber(balancesAll.vestingEndBlock)}</div>
-                  {formatBalance(balancesAll.vestingPerBlock)}
-                  <div className='faded'>{t('per block')}</div>
+                  {bestNumber.lt(balancesAll.vestingEndBlock) && (
+                    <>
+                      <BlockToTime blocks={balancesAll.vestingEndBlock.sub(bestNumber)} />
+                      <div className='faded'>{t('until block')} {formatNumber(balancesAll.vestingEndBlock)}</div>
+                      {formatBalance(balancesAll.vestingPerBlock)}
+                      <div className='faded'>{t('per block')}</div>
+                    </>
+                  )}
                 </div>
               }
               trigger={`${address}-vested-trigger`}

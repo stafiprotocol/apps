@@ -1,6 +1,7 @@
 // Copyright 2017-2020 @polkadot/react-components authors & contributors
-// This software may be modified and distributed under the terms
-// of the Apache-2.0 license. See the LICENSE file for details.
+// SPDX-License-Identifier: Apache-2.0
+
+import { ThemeProps } from '../types';
 
 import React from 'react';
 import styled from 'styled-components';
@@ -35,7 +36,7 @@ function Head ({ className = '', filter, header, isEmpty }: Props): React.ReactE
             onClick={onClick}
           >
             {index === 0
-              ? <h1>{label}</h1>
+              ? <h1 className='highlight--color'>{label}</h1>
               : isEmpty
                 ? ''
                 : label
@@ -47,28 +48,28 @@ function Head ({ className = '', filter, header, isEmpty }: Props): React.ReactE
   );
 }
 
-export default React.memo(styled(Head)`
+export default React.memo(styled(Head)(({ theme }: ThemeProps) => `
   position: relative;
   z-index: 1;
 
   th {
     font-family: sans-serif;
     font-weight: 100;
-    padding: 0.75rem 1rem 0.5rem;
+    padding: 0.75rem 1rem 0.25rem;
     text-align: right;
     vertical-align: baseline;
     white-space: nowrap;
 
+    h1, h2 {
+      font-size: 1.75rem;
+    }
+
     &:first-child {
-      border-top-left-radius: 0.25rem;
+      border-left: 1px solid ${theme.borderTable};
     }
 
     &:last-child {
-      border-top-rights-radius: 0.25rem;
-    }
-
-    h1, h2 {
-      font-size: 1.75rem;
+      border-right: 1px solid ${theme.borderTable};
     }
 
     &.address {
@@ -78,6 +79,10 @@ export default React.memo(styled(Head)`
 
     &.badge {
       padding: 0;
+    }
+
+    &.expand {
+      text-align: right;
     }
 
     &.isClickable {
@@ -95,13 +100,12 @@ export default React.memo(styled(Head)`
   }
 
   tr {
-    background: rgba(255, 254, 253, 1);
+    background: ${theme.bgTable};
     text-transform: lowercase;
 
-
-    &:not(.filter) {
+    &:first-child {
       th {
-        color: rgba(78, 78, 78, 0.66);
+        border-top: 1px solid ${theme.borderTable};
       }
     }
 
@@ -110,7 +114,7 @@ export default React.memo(styled(Head)`
         background: transparent;
 
         &:first-child {
-          margin-top: 0;
+          margin-top: -1px;
         }
       }
 
@@ -118,5 +122,11 @@ export default React.memo(styled(Head)`
         padding: 0;
       }
     }
+
+    &:not(.filter) {
+      th {
+        color: rgba(${theme.theme === 'dark' ? '254, 240, 240' : '78, 78, 78'}, 0.66);
+      }
+    }
   }
-`);
+`));

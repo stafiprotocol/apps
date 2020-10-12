@@ -1,6 +1,5 @@
 // Copyright 2017-2020 @polkadot/apps-config authors & contributors
-// This software may be modified and distributed under the terms
-// of the Apache-2.0 license. See the LICENSE file for details.
+// SPDX-License-Identifier: Apache-2.0
 
 import { TFunction } from 'i18next';
 import { Option } from './types';
@@ -11,6 +10,7 @@ export interface LinkOption extends Option {
   dnslink?: string;
   isChild?: boolean;
   isDevelopment?: boolean;
+  textHoster: string;
 }
 
 interface EnvWindow {
@@ -27,10 +27,11 @@ function createOwn (t: TFunction): LinkOption[] {
     if (storedItems) {
       const items = JSON.parse(storedItems) as string[];
 
-      return items.map((item) => ({
+      return items.map((textHoster) => ({
         info: 'local',
-        text: t<string>('rpc.custom.entry', 'Custom (custom, {{WS_URL}})', { ns: 'apps-config', replace: { WS_URL: item } }),
-        value: item
+        text: t<string>('rpc.custom.entry', 'Custom', { ns: 'apps-config' }),
+        textHoster,
+        value: textHoster
       }));
     }
   } catch (e) {
@@ -45,7 +46,8 @@ function createDev (t: TFunction): LinkOption[] {
     {
       dnslink: 'local',
       info: 'local',
-      text: t<string>('rpc.local', 'Local Node (Own, 127.0.0.1:9944)', { ns: 'apps-config' }),
+      text: t<string>('rpc.local', 'Local Node', { ns: 'apps-config' }),
+      textHoster: '127.0.0.1:9944',
       value: 'ws://127.0.0.1:9944'
     }
   ];
@@ -84,11 +86,13 @@ function createCustom (t: TFunction): LinkOption[] {
       {
         isHeader: true,
         text: t<string>('rpc.custom', 'Custom environment', { ns: 'apps-config' }),
+        textHoster: '',
         value: ''
       },
       {
         info: 'WS_URL',
         text: t<string>('rpc.custom.entry', 'Custom {{WS_URL}}', { ns: 'apps-config', replace: { WS_URL } }),
+        textHoster: WS_URL,
         value: WS_URL
       }
     ]
@@ -106,12 +110,14 @@ export default function create (t: TFunction): LinkOption[] {
     {
       isHeader: true,
       text: t<string>('rpc.header.live', 'Live networks', { ns: 'apps-config' }),
+      textHoster: '',
       value: ''
     },
     ...createLiveNetworks(t),
     {
       isHeader: true,
       text: t<string>('rpc.header.test', 'Test networks', { ns: 'apps-config' }),
+      textHoster: '',
       value: ''
     },
     ...createTestNetworks(t),
@@ -119,6 +125,7 @@ export default function create (t: TFunction): LinkOption[] {
       isDevelopment: true,
       isHeader: true,
       text: t<string>('rpc.header.dev', 'Development', { ns: 'apps-config' }),
+      textHoster: '',
       value: ''
     },
     ...createDev(t),
