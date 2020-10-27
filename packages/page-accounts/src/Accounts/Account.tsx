@@ -32,6 +32,7 @@ import ProxyOverview from '../modals/ProxyOverview';
 import MultisigApprove from '../modals/MultisigApprove';
 import RecoverAccount from '../modals/RecoverAccount';
 import RecoverSetup from '../modals/RecoverSetup';
+import Swap from '../modals/Rswap';
 import Transfer from '../modals/Transfer';
 import UndelegateModal from '../modals/Undelegate';
 import useMultisigApprovals from './useMultisigApprovals';
@@ -102,6 +103,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const [isRecoverAccountOpen, toggleRecoverAccount] = useToggle();
   const [isRecoverSetupOpen, toggleRecoverSetup] = useToggle();
   const [isSettingsOpen, toggleSettings] = useToggle();
+  const [isSwapOpen, toggleSwap] = useToggle();
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isDelegateOpen, toggleDelegate] = useToggle();
   const [isUndelegateOpen, toggleUndelegate] = useToggle();
@@ -338,6 +340,13 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
             onClose={togglePassword}
           />
         )}
+        {isSwapOpen && (
+          <Swap
+            key='modal-swap'
+            onClose={toggleSwap}
+            senderId={address}
+          />
+        )}
         {isTransferOpen && (
           <Transfer
             key='modal-transfer'
@@ -440,6 +449,14 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
                   onClick={toggleIdentityMain}
                 >
                   {t('Set on-chain identity')}
+                </Menu.Item>
+              ),
+              api.api.tx.bridgeSwap?.transferNative && (
+                <Menu.Item
+                  key='swap'
+                  onClick={toggleSwap}
+                >
+                  {t('rSwap')}
                 </Menu.Item>
               ),
               api.api.tx.identity?.setSubs && identity?.display && (

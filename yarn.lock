@@ -2977,6 +2977,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stafi/app-rswap@workspace:packages/page-rswap":
+  version: 0.0.0-use.local
+  resolution: "@stafi/app-rswap@workspace:packages/page-rswap"
+  dependencies:
+    "@babel/runtime": ^7.11.2
+    "@polkadot/react-components": 0.61.2-21
+    secp256k1: ^3.8.0
+  languageName: unknown
+  linkType: soft
+
 "@stardust-ui/react-component-event-listener@npm:~0.38.0":
   version: 0.38.0
   resolution: "@stardust-ui/react-component-event-listener@npm:0.38.0"

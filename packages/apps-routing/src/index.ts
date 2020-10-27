@@ -17,6 +17,7 @@ import js from './js';
 import parachains from './parachains';
 import poll from './poll';
 import rpc from './rpc';
+import rswap from './rswap';
 import settings from './settings';
 import signing from './signing';
 import society from './society';
@@ -34,6 +35,7 @@ export default function create (t: <T = string> (key: string, text: string, opti
     addresses(t),
     explorer(t),
     // claims(t),
+    rswap(t),
     poll(t),
     transfer(t),
     genericAsset(t),
