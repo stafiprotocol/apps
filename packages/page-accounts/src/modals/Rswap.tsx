@@ -5,12 +5,13 @@ import { Balance } from '@polkadot/types/interfaces';
 import { Option } from '@polkadot/types';
 
 import BN from 'bn.js';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { InputAddress, InputBalance, Input, Modal, Static, TxButton } from '@polkadot/react-components';
+import { InputAddress, InputBalance, Input, Modal, Static, TxButton, Dropdown } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 import { Available, FormatBalance } from '@polkadot/react-query';
-import { BN_ZERO } from '@polkadot/util';
+import { BN_ZERO, BN_TEN, formatBalance } from '@polkadot/util';
+import { keccakAsHex } from '@polkadot/util-crypto';
 
 import { useTranslation } from '../translate';
 
@@ -24,6 +25,34 @@ const transformChainFees = {
   transform: (value: Option<Balance>) => value.unwrapOr(null)
 };
 
+function checkAddressChecksum(address: string) {
+  // Check each case
+  address = address.replace(/^0x/i, '');
+  var addressHash = keccakAsHex(address.toLowerCase()).substr(2);
+
+  for (var i = 0; i < 40; i++) {
+      // the nth letter should be uppercase if the nth digit of casemap is 1
+    if ((parseInt(addressHash[i], 16) > 7 && address[i].toUpperCase() !== address[i])
+      || (parseInt(addressHash[i], 16) <= 7 && address[i].toLowerCase() !== address[i])) {
+          return false;
+      }
+  }
+  return true;
+};
+
+function isEthAddress(address: string) {
+  // check if it has the basic requirements of an address
+  if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+    return false;
+    // If it's ALL lowercase or ALL upppercase
+  } else if (/^(0x|0X)?[0-9a-f]{40}$/.test(address) || /^(0x|0X)?[0-9A-F]{40}$/.test(address)) {
+    return true;
+    // Otherwise check each case
+  } else {
+    return checkAddressChecksum(address);
+  }
+};
+
 const ethChainId = 2;
 
 function Swap ({ className = '', onClose, senderId: propSenderId }: Props): React.ReactElement<Props> {
@@ -31,12 +60,25 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
   const { api } = useApi();
   const [amount, setAmount] = useState<BN | undefined>(BN_ZERO);
   const [hasAvailable] = useState(true);
+  const [ethAddressAvailable, setEthAddressAvailable] = useState(false);
   const [recipientId, setRecipientId] = useState<string | null>(null);
   const [senderId, setSenderId] = useState<string | null>(propSenderId || null);
 
   const chainFees = useCall<Balance | null>(api.query.bridgeCommon.chainFees, [ethChainId], transformChainFees);
 
   const transferrable = <span className='label'>{t<string>('transferrable')}</span>;
+
+  const si = formatBalance.findSi('-');
+
+  const onChangeEthereumAddress = useCallback((value: string) => {
+    if (value && value.length == 42) {
+      setEthAddressAvailable(isEthAddress(value));
+    } else {
+      setEthAddressAvailable(false);
+    }
+    
+    setRecipientId(value.trim());
+  }, []);
 
   return (
     <Modal
@@ -83,15 +125,21 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
                 label={t<string>('swap amount')}
                 onChange={setAmount}
               />
-              <InputBalance
-                // defaultValue={amount ? amount.sub(chainFees ? chainFees.toBn() : BN_ZERO) : BN_ZERO}
-                defaultValue={amount}
-                help={t<string>('')}
-                isDisabled
-                label={t<string>('to ethereum')}
-              />
+              <Input
+                  help={t<string>('The amount swapped to ethereum')}
+                  isDisabled
+                  label={t<string>('to ethereum')}
+                  value={amount?.div(BN_TEN.pow(new BN(formatBalance.getDefaults().decimals + si.power))).toString()}
+                >
+                  <Dropdown
+                    defaultValue={t<string>('erc20')}
+                    dropdownClassName='ui--SiDropdown'
+                    isButton
+                    options={[{ text: t<string>('FIS-ERC20'), value: 'erc20' }]}
+                  />
+                </Input>
               <Static
-                help={t<string>('The estimated fee for sending transactions to Ethereum smart contracts.')}
+                help={t<string>('The estimated fee for sending transactions to ethereum smart contracts.')}
                 label={t<string>('estimated fee')}
               >
                 <FormatBalance
@@ -108,9 +156,10 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
           <Modal.Columns>
             <Modal.Column>
               <Input
-                help={t<string>('The Ethereum address you want to swap funds to.')}
+                help={t<string>('The ethereum address you want to swap funds to (starting by "0x")')}
                 label={t<string>('ethereum address')}
-                onChange={setRecipientId}
+                isError={!ethAddressAvailable}
+                onChange={onChangeEthereumAddress}
                 value={recipientId || ''}
               />
             </Modal.Column>
@@ -124,7 +173,7 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
         <TxButton
           accountId={senderId}
           icon='paper-plane'
-          isDisabled={!hasAvailable || !recipientId || (amount == undefined ? true : amount <= BN_ZERO)}
+          isDisabled={!hasAvailable || !ethAddressAvailable || (amount == undefined ? true : amount <= BN_ZERO)}
           label={t<string>('Make Swap')}
           onStart={onClose}
           params={
@@ -140,6 +189,19 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
 }
 
 export default React.memo(styled(Swap)`
+  .ui--SiDropdown {
+    background: transparent;
+    border-color: rgba(34, 36, 38, .15) !important;
+    border-style: dashed;
+    color: #666 !important;
+    cursor: default !important;
+    font-size: 8rem;
+
+    .icon {
+      display: none;
+    }
+  }
+
   .balance {
     margin-bottom: 0.5rem;
     text-align: right;
@@ -154,11 +216,4 @@ export default React.memo(styled(Swap)`
     flex-basis: 10rem;
   }
 
-  .typeToggle {
-    text-align: right;
-  }
-
-  .typeToggle+.typeToggle {
-    margin-top: 0.375rem;
-  }
 `);
