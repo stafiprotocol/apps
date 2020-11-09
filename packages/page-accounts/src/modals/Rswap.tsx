@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { InputAddress, InputBalance, Input, Modal, Static, TxButton, Dropdown } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 import { Available, FormatBalance } from '@polkadot/react-query';
-import { BN_ZERO, BN_TEN, formatBalance } from '@polkadot/util';
+import { BN_ZERO, BN_TEN, isBn, formatBalance } from '@polkadot/util';
 import { keccakAsHex } from '@polkadot/util-crypto';
 
 import { useTranslation } from '../translate';
@@ -53,12 +53,36 @@ function isEthAddress(address: string) {
   }
 };
 
+const BN_TEN_DECIMALS = new BN(1_000_000);
+function reformat (value: string | BN, isDisabled?: boolean): string {
+  if (isBn(value)) {
+    // format for 6 decimals (align with util)
+    let fmt = (value.mul(BN_TEN_DECIMALS).div(BN_TEN.pow(new BN(formatBalance.getDefaults().decimals))).toNumber() / 1000000).toFixed(6);
+
+    while (fmt.length !== 1 && ['.', '0'].includes(fmt[fmt.length - 1])) {
+      const isLast = fmt.endsWith('.');
+
+      fmt = fmt.substr(0, fmt.length - 1);
+
+      if (isLast) {
+        break;
+      }
+    }
+
+    return fmt;
+  }
+
+  return formatBalance(value, { forceUnit: '-', withSi: false }).replace(',', isDisabled ? ',' : '');
+}
+
+
 const ethChainId = 2;
 
 function Swap ({ className = '', onClose, senderId: propSenderId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [amount, setAmount] = useState<BN | undefined>(BN_ZERO);
+  const [ethValue, setEthValue] = useState<string | null>('0');
   const [hasAvailable] = useState(true);
   const [ethAddressAvailable, setEthAddressAvailable] = useState(false);
   const [recipientId, setRecipientId] = useState<string | null>(null);
@@ -68,8 +92,6 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
 
   const transferrable = <span className='label'>{t<string>('transferrable')}</span>;
 
-  const si = formatBalance.findSi('-');
-
   const onChangeEthereumAddress = useCallback((value: string) => {
     if (value && value.length == 42) {
       setEthAddressAvailable(isEthAddress(value));
@@ -78,6 +100,20 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
     }
     
     setRecipientId(value.trim());
+  }, []);
+
+  const onChangeSwapAmount = useCallback((value: BN | undefined) => {
+    setAmount(value);
+    if (value) {
+
+      try {
+        let ethValue = reformat(value, true);
+        setEthValue(ethValue);
+      } catch (error) {
+        
+      }
+      
+    }
   }, []);
 
   return (
@@ -121,15 +157,15 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
                 autoFocus
                 help={t<string>('Type the amount you want to swap. Note that you can select the unit on the right e.g sending 1 milli is equivalent to sending 0.001.')}
                 isError={!hasAvailable}
-                isZeroable
+                isZeroable={false}
                 label={t<string>('swap amount')}
-                onChange={setAmount}
+                onChange={onChangeSwapAmount}
               />
               <Input
                   help={t<string>('The amount swapped to ethereum')}
                   isDisabled
                   label={t<string>('to ethereum')}
-                  value={amount?.div(BN_TEN.pow(new BN(formatBalance.getDefaults().decimals + si.power))).toString()}
+                  value={ethValue}
                 >
                   <Dropdown
                     defaultValue={t<string>('erc20')}
