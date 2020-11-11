@@ -20,7 +20,7 @@ export default function create (t: <T = string> (key: string, text: string, opti
     },
     group: 'accounts',
     icon: 'star',
-    name: 'rswap',
-    text: t<string>('nav.rswap', 'rSwap', { ns: 'apps-routing' })
+    name: 'rBridge',
+    text: t<string>('nav.rswap', 'rBridge', { ns: 'apps-routing' })
   };
 }

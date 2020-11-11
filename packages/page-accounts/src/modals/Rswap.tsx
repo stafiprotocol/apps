@@ -119,15 +119,14 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
   return (
     <Modal
       className='app--accounts-Modal'
-      header={t<string>('rSwap')}
+      header={t<string>('rBridge')}
       size='large'
     >
       <Modal.Content>
         <div className={className}>
           <Modal.Description>
             <p>
-              The bridge will charge a fee for transfering your tokens, it is a estimated fee, calculated by the gas fee of Ethereum, 
-              and the fee will be withdrawn from your transfered account, determined when the transaction is finalized.
+            The bridge will charge a certain amout of FIS to cover the ETH gas fee paid by StaFi for sending ERC20 FIS to your ETH address. We will calulate the estimated fee based on the exchange rate of ETH gas charged and FIS token at the real time. Estimated fee will be deducted from your transfered account.
             </p>
           </Modal.Description>
           <Modal.Columns>
@@ -161,6 +160,10 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
                 label={t<string>('swap amount')}
                 onChange={onChangeSwapAmount}
               />
+            </Modal.Column>
+          </Modal.Columns>
+          <Modal.Columns>
+            <Modal.Column>
               <Input
                   help={t<string>('The amount swapped to ethereum')}
                   isDisabled
@@ -173,10 +176,17 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
                     isButton
                     options={[{ text: t<string>('FIS-ERC20'), value: 'erc20' }]}
                   />
-                </Input>
+              </Input>
+            </Modal.Column>
+            <Modal.Column>
+              <p>{t<string>('The amount of ERC20 FIS you will receive on ethereum.')}</p>
+            </Modal.Column>
+          </Modal.Columns>
+          <Modal.Columns>
+            <Modal.Column>
               <Static
-                help={t<string>('The estimated fee for sending transactions to ethereum smart contracts.')}
-                label={t<string>('estimated fee')}
+                help={t<string>('The estimated fees for sending transactions to ethereum smart contracts.')}
+                label={t<string>('estimated fees')}
               >
                 <FormatBalance
                   value={chainFees}
@@ -184,10 +194,9 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
                 </FormatBalance>
               </Static>
             </Modal.Column>
-            {/* <Modal.Column>
-              <p>{t<string>('Likewise if the sending account balance drops below the same value, the account will be removed from the state.')}</p>
-              <p>{t('The account will be removal due to low balances.')}</p>
-            </Modal.Column> */}
+            <Modal.Column>
+              <p>{t<string>('The estimated fees will be subtracted from the sender account.')}</p>
+            </Modal.Column>
           </Modal.Columns>
           <Modal.Columns>
             <Modal.Column>
@@ -199,9 +208,9 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
                 value={recipientId || ''}
               />
             </Modal.Column>
-            {/* <Modal.Column>
-              <p>{t<string>('The beneficiary will have access to the transferred fees when the transaction is included in a block.')}</p>
-            </Modal.Column> */}
+            <Modal.Column>
+              <p>{t<string>('Your ethereum address to receive ERC20 FIS.')}</p>
+            </Modal.Column>
           </Modal.Columns>
         </div>
       </Modal.Content>
