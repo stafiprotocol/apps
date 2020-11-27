@@ -1,9 +1,9 @@
 // Copyright 2017-2020 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeriveAccountInfo } from '@polkadot/api-derive/types';
-import { UnappliedSlash } from '@polkadot/types/interfaces';
-import { ValidatorInfo } from '../types';
+import type { DeriveAccountInfo } from '@polkadot/api-derive/types';
+import type { UnappliedSlash } from '@polkadot/types/interfaces';
+import type { ValidatorInfo } from '../types';
 
 import BN from 'bn.js';
 import React, { useCallback, useEffect, useMemo } from 'react';
@@ -32,13 +32,22 @@ interface Props {
   withIdentity: boolean;
 }
 
-function checkIdentity (api: ApiPromise, accountInfo: DeriveAccountInfo): boolean {
+function checkIdentity (api: ApiPromise, accountInfo: DeriveAccountInfo): [boolean, string | null] {
   let hasIdentity = false;
+  let parentId: string | null = null;
 
   const { accountId, identity, nickname } = accountInfo;
 
+  if (accountId) {
+    parentId = accountId.toString();
+  }
+
   if (api.query.identity && api.query.identity.identityOf) {
     hasIdentity = !!(identity?.display && identity.display.toString());
+
+    if (identity.parent) {
+      parentId = identity.parent.toString();
+    }
   } else if (nickname) {
     hasIdentity = !!nickname.toString();
   }
@@ -49,7 +58,7 @@ function checkIdentity (api: ApiPromise, accountInfo: DeriveAccountInfo): boolea
     hasIdentity = !!account?.meta?.name;
   }
 
-  return hasIdentity;
+  return [hasIdentity, parentId];
 }
 
 function Validator ({ allSlashes, canSelect, filterName, info, isNominated, isSelected, toggleFavorite, toggleSelected, withElected, withIdentity }: Props): React.ReactElement<Props> | null {
@@ -59,7 +68,10 @@ function Validator ({ allSlashes, canSelect, filterName, info, isNominated, isSe
 
   useEffect((): void => {
     if (accountInfo) {
-      info.hasIdentity = checkIdentity(api, accountInfo);
+      const [hasIdentity, parentId] = checkIdentity(api, accountInfo);
+
+      info.hasIdentity = hasIdentity;
+      info.parentId = parentId;
     }
   }, [api, accountInfo, info]);
 

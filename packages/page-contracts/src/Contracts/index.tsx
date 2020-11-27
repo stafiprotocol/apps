@@ -1,13 +1,16 @@
 // Copyright 2017-2020 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { StringOrNull } from '@polkadot/react-components/types';
+import type { ContractCallOutcome } from '@polkadot/api-contract/types';
+import type { FullNewBlock } from '@polkadot/api-derive/types';
+import type { ContractLink } from './types';
 
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ApiPromise } from '@polkadot/api';
-import { PromiseContract as ApiContract } from '@polkadot/api-contract';
+import { ContractPromise } from '@polkadot/api-contract';
 import { Table } from '@polkadot/react-components';
-import { useApi } from '@polkadot/react-hooks';
+import { useApi, useCall } from '@polkadot/react-hooks';
+import { formatNumber } from '@polkadot/util';
 
 import { useTranslation } from '../translate';
 import Contract from './Contract';
@@ -19,25 +22,62 @@ export interface Props {
   updated: number;
 }
 
-function filterContracts (api: ApiPromise, keyringContracts: string[] = []): ApiContract[] {
+interface Indexes {
+  contractIndex: number;
+  messageIndex: number;
+  onCallResult?: (messageIndex: number, result?: ContractCallOutcome) => void;
+}
+
+function filterContracts (api: ApiPromise, keyringContracts: string[] = []): ContractPromise[] {
   return keyringContracts
-    .map((address): ApiContract | null => getContractForAddress(api, address.toString()))
-    .filter((contract: ApiContract | null): contract is ApiContract => !!contract);
+    .map((address) => getContractForAddress(api, address.toString()))
+    .filter((contract): contract is ContractPromise => !!contract);
 }
 
 function Contracts ({ contracts: keyringContracts }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
-  const [contractIndex, setContractIndex] = useState<number>(0);
-  const [messageIndex, setMessageIndex] = useState<number>(0);
+  const newBlock = useCall<FullNewBlock>(api.derive.chain.subscribeNewBlocks);
+  const [{ contractIndex, messageIndex, onCallResult }, setIndexes] = useState<Indexes>({ contractIndex: 0, messageIndex: 0 });
   const [isCallOpen, setIsCallOpen] = useState(false);
+  const [contractLinks, setContractLinks] = useState<Record<string, ContractLink[]>>({});
 
   const headerRef = useRef<[string?, string?, number?][]>([
     [t('contracts'), 'start'],
-    [undefined, undefined, 2],
+    [undefined, undefined, 3],
     [t('status'), 'start'],
+    [t('projection'), 'media--1100'],
     []
   ]);
+
+  useEffect((): void => {
+    if (newBlock) {
+      const exts = newBlock.block.extrinsics
+        .filter(({ method: { method, section } }) => section === 'contracts' && method === 'call')
+        .map(({ args }): ContractLink | null => {
+          const contractId = keyringContracts.find((a) => args[0].eq(a));
+
+          if (!contractId) {
+            return null;
+          }
+
+          return {
+            blockHash: newBlock.blockHash.toHex(),
+            blockNumber: formatNumber(newBlock.blockNumber),
+            contractId
+          };
+        })
+        .filter((value): value is ContractLink => !!value);
+
+      exts.length && setContractLinks((links): Record<string, ContractLink[]> => {
+        exts.forEach((value): void => {
+          links[value.contractId] = [value].concat(links[value.contractId] || []).slice(0, 3);
+        });
+
+        return { ...links };
+      });
+    }
+  }, [keyringContracts, newBlock]);
 
   const contracts = useMemo(
     () => filterContracts(api, keyringContracts),
@@ -49,27 +89,16 @@ function Contracts ({ contracts: keyringContracts }: Props): React.ReactElement<
     []
   );
 
-  const _onChangeCallContractAddress = (newCallContractAddress: StringOrNull): void => {
-    const index = contracts.findIndex(({ address }: ApiContract) => newCallContractAddress === address.toString());
-
-    if (index > -1) {
-      index !== contractIndex && setMessageIndex(0);
-      setContractIndex(index);
-    }
-  };
-
-  const _onChangeCallMessageIndex = useCallback(
-    (messageIndex: number) => contracts[contractIndex] && setMessageIndex(messageIndex || 0),
-    [contractIndex, contracts]
+  const _onCall = useCallback(
+    (contractIndex: number, messageIndex: number, onCallResult: (messageIndex: number, result?: ContractCallOutcome) => void): void => {
+      setIndexes({ contractIndex, messageIndex, onCallResult });
+      setIsCallOpen(true);
+    },
+    []
   );
 
-  const _onCall = useCallback(
-    (contractIndex: number) =>
-      (messageIndex?: number): void => {
-        setContractIndex(contractIndex);
-        setMessageIndex(messageIndex || 0);
-        setIsCallOpen(true);
-      },
+  const _setMessageIndex = useCallback(
+    (messageIndex: number) => setIndexes((state) => ({ ...state, messageIndex })),
     []
   );
 
@@ -81,11 +110,13 @@ function Contracts ({ contracts: keyringContracts }: Props): React.ReactElement<
         empty={t<string>('No contracts available')}
         header={headerRef.current}
       >
-        {contracts.map((contract: ApiContract, index): React.ReactNode => (
+        {contracts.map((contract, index): React.ReactNode => (
           <Contract
             contract={contract}
+            index={index}
             key={contract.address.toString()}
-            onCall={_onCall(index)}
+            links={contractLinks[contract.address.toString()]}
+            onCall={_onCall}
           />
         ))}
       </Table>
@@ -94,8 +125,8 @@ function Contracts ({ contracts: keyringContracts }: Props): React.ReactElement<
           contract={contract}
           isOpen={isCallOpen}
           messageIndex={messageIndex}
-          onChangeCallContractAddress={_onChangeCallContractAddress}
-          onChangeCallMessageIndex={_onChangeCallMessageIndex}
+          onCallResult={onCallResult}
+          onChangeMessage={_setMessageIndex}
           onClose={_toggleCall}
         />
       )}

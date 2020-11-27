@@ -1,7 +1,7 @@
 // Copyright 2017-2020 @polkadot/app-contracts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { AppProps as Props } from '@polkadot/react-components/types';
+import type { AppProps as Props } from '@polkadot/react-components/types';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -12,11 +12,11 @@ import introMd from './md/intro.md';
 import store from './store';
 import Contracts from './Contracts';
 import ContractAdd from './Contracts/Add';
+import Banner from './Banner';
 import Codes from './Codes';
 import CodeAdd from './Codes/Add';
 import CodeUpload from './Codes/Upload';
 import Deploy from './Deploy';
-import Ink3Banner from './Ink3Banner';
 import Summary from './Summary';
 import { useTranslation } from './translate';
 
@@ -100,7 +100,7 @@ function ContractsApp ({ basePath, className = '' }: Props): React.ReactElement<
           onClick={toggleAdd}
         />
       </Button.Group>
-      <Ink3Banner />
+      <Banner />
       <Contracts
         contracts={allContracts}
         updated={updated}
@@ -111,7 +111,6 @@ function ContractsApp ({ basePath, className = '' }: Props): React.ReactElement<
       />
       {codeHash && isDeployOpen && (
         <Deploy
-          basePath={basePath}
           codeHash={codeHash}
           constructorIndex={constructorIndex}
           onClose={_onCloseDeploy}

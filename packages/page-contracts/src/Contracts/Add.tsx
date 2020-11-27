@@ -1,8 +1,8 @@
 // Copyright 2017-2020 @polkadot/app-contracts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { StringOrNull } from '@polkadot/react-components/types';
-import { ActionStatus } from '@polkadot/react-components/Status/types';
+import type { StringOrNull } from '@polkadot/react-components/types';
+import type { ActionStatus } from '@polkadot/react-components/Status/types';
 
 import React, { useCallback, useState } from 'react';
 import { AddressRow, Button, Input, Modal } from '@polkadot/react-components';
@@ -92,13 +92,11 @@ function Add ({ onClose }: Props): React.ReactElement {
           <ABI
             contractAbi={contractAbi}
             errorText={errorText}
-            isContract
-            isError={isAbiError}
+            isError={isAbiError || !isAbiValid}
             isSupplied={isAbiSupplied}
             isValid={isAbiValid}
             onChange={onChangeAbi}
             onRemove={onRemoveAbi}
-            withLabel
           />
         </AddressRow>
       </Modal.Content>

@@ -4,6 +4,10 @@
 import typesChain from './chain';
 import typesSpec from './spec';
 
+export { default as typesBundle } from './bundle';
+export * from './constants';
+export { default as typesRpc } from './rpc';
+
 export function getChainTypes (specName: string, chainName: string): Record<string, string | Record<string, unknown>> {
   return {
     ...(typesSpec[specName as 'edgeware'] || {}),

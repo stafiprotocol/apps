@@ -1,7 +1,7 @@
 // Copyright 2017-2020 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DateState, EntryInfo } from './types';
+import type { DateState, EntryInfo } from './types';
 
 import React, { useMemo, useRef } from 'react';
 import styled from 'styled-components';
@@ -109,7 +109,7 @@ export default React.memo(styled(Month)`
     .dayOfWeek {
       > * {
         font-size: 0.7em;
-        font-weight: 500;
+        font-weight: 400;
         letter-spacing: 0.1em;
         text-align: center;
         text-transform: uppercase;

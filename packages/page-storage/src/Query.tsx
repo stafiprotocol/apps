@@ -1,10 +1,11 @@
 // Copyright 2017-2020 @polkadot/app-storage authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { QueryableStorageEntry } from '@polkadot/api/types';
-import { RenderFn, DefaultProps, ComponentRenderer } from '@polkadot/react-api/hoc/types';
-import { ConstValue } from '@polkadot/react-components/InputConsts/types';
-import { QueryTypes, StorageModuleQuery } from './types';
+import type { QueryableStorageEntry } from '@polkadot/api/types';
+import type { RenderFn, DefaultProps, ComponentRenderer } from '@polkadot/react-api/hoc/types';
+import type { ConstValue } from '@polkadot/react-components/InputConsts/types';
+import type { Option, Raw } from '@polkadot/types';
+import type { QueryTypes, StorageModuleQuery } from './types';
 
 import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
@@ -12,8 +13,7 @@ import { unwrapStorageType } from '@polkadot/types/primitive/StorageKey';
 import { Button, Labelled } from '@polkadot/react-components';
 import { withCallDiv } from '@polkadot/react-api/hoc';
 import valueToText from '@polkadot/react-params/valueToText';
-import { Compact, Option, Raw } from '@polkadot/types';
-import { isU8a, u8aToHex, u8aToString } from '@polkadot/util';
+import { compactStripLength, isU8a, u8aToHex, u8aToString } from '@polkadot/util';
 
 interface Props {
   className?: string;
@@ -39,7 +39,7 @@ function keyToName (isConst: boolean, _key: Uint8Array | QueryableStorageEntry<'
   const key = _key as Uint8Array | QueryableStorageEntry<'promise'>;
 
   if (isU8a(key)) {
-    const u8a = Compact.stripLengthPrefix(key);
+    const [, u8a] = compactStripLength(key);
 
     // If the string starts with `:`, handle it as a pure string
     return u8a[0] === 0x3a

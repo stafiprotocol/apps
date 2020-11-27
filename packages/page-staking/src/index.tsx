@@ -1,9 +1,9 @@
 // Copyright 2017-2020 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeriveStakingOverview } from '@polkadot/api-derive/types';
-import { AppProps as Props, ThemeProps } from '@polkadot/react-components/types';
-import { ElectionStatus } from '@polkadot/types/interfaces';
+import type { DeriveStakingOverview } from '@polkadot/api-derive/types';
+import type { AppProps as Props, ThemeProps } from '@polkadot/react-components/types';
+import type { ElectionStatus } from '@polkadot/types/interfaces';
 
 import React, { useMemo } from 'react';
 import { Route, Switch } from 'react-router';
@@ -26,7 +26,7 @@ import { STORE_FAVS_BASE } from './constants';
 import { useTranslation } from './translate';
 import useSortedTargets from './useSortedTargets';
 
-const HIDDEN_ACC = ['actions', 'payouts'];
+const HIDDEN_ACC = ['actions', 'payout'];
 
 const transformElection = {
   transform: (status: ElectionStatus) => status.isOpen
@@ -42,6 +42,7 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
   const ownStashes = useOwnStashInfos();
   const slashes = useAvailableSlashes();
   const targets = useSortedTargets(favorites);
+  // const inflation = useInflation(targets?.totalStaked);
   const stakingOverview = useCall<DeriveStakingOverview>(api.derive.staking.overview);
   const isInElection = useCall<boolean>(api.query.staking?.eraElectionStatus, undefined, transformElection);
 

@@ -1,15 +1,14 @@
 // Copyright 2017-2020 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { KeyringOptions, KeyringSectionOption, KeyringSectionOptions, KeyringOption$Type } from '@polkadot/ui-keyring/options/types';
-import { Option } from './types';
+import type { KeyringOptions, KeyringSectionOption, KeyringSectionOptions, KeyringOption$Type } from '@polkadot/ui-keyring/options/types';
+import type { Option } from './types';
 
 import React from 'react';
 import store from 'store';
 import styled from 'styled-components';
 import { withMulti, withObservable } from '@polkadot/react-api/hoc';
 import keyring from '@polkadot/ui-keyring';
-import keyringOption from '@polkadot/ui-keyring/options';
 import createKeyringItem from '@polkadot/ui-keyring/options/item';
 import { isNull, isUndefined } from '@polkadot/util';
 
@@ -290,7 +289,8 @@ const ExportedComponent = withMulti(
           top: -1.05rem;
 
           > div,
-          > svg {
+          img,
+          svg {
             height: 32px !important;
             width: 32px !important;
           }
@@ -315,7 +315,7 @@ const ExportedComponent = withMulti(
       max-width: 0;
     }
   `,
-  withObservable(keyringOption.optionsSubject, {
+  withObservable(keyring.keyringOption.optionsSubject, {
     propName: 'optionsAll',
     transform: (optionsAll: KeyringOptions): Record<string, (Option | React.ReactNode)[]> =>
       Object.entries(optionsAll).reduce((result: Record<string, (Option | React.ReactNode)[]>, [type, options]): Record<string, (Option | React.ReactNode)[]> => {

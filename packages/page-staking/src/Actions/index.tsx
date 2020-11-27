@@ -1,8 +1,8 @@
 // Copyright 2017-2020 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { StakerState } from '@polkadot/react-hooks/types';
-import { SortedTargets } from '../types';
+import type { StakerState } from '@polkadot/react-hooks/types';
+import type { SortedTargets } from '../types';
 
 import BN from 'bn.js';
 import React, { useMemo, useRef } from 'react';
@@ -32,8 +32,16 @@ interface State {
   foundStashes?: StakerState[];
 }
 
+function assignValue ({ isStashNominating, isStashValidating }: StakerState): number {
+  return isStashValidating
+    ? 1
+    : isStashNominating
+      ? 5
+      : 99;
+}
+
 function sortStashes (a: StakerState, b: StakerState): number {
-  return (a.isStashValidating ? 1 : (a.isStashNominating ? 5 : 99)) - (b.isStashValidating ? 1 : (b.isStashNominating ? 5 : 99));
+  return assignValue(a) - assignValue(b);
 }
 
 function extractState (ownStashes?: StakerState[]): State {

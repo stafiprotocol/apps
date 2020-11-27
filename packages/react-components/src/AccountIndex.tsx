@@ -1,8 +1,9 @@
 // Copyright 2017-2020 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { AccountId, Address } from '@polkadot/types/interfaces';
-import { DeriveAccountInfo } from '@polkadot/api-derive/types';
+import type { DeriveAccountInfo } from '@polkadot/api-derive/types';
+import type { ThemeProps } from '@polkadot/react-components/types';
+import type { AccountId, Address } from '@polkadot/types/interfaces';
 
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
@@ -42,8 +43,8 @@ function AccountIndex ({ children, className = '', defaultValue, label, value }:
   );
 }
 
-export default React.memo(styled(AccountIndex)`
+export default React.memo(styled(AccountIndex)(({ theme }: ThemeProps) => `
   .account-index {
-    font-family: monospace;
+    font: ${theme.fontMono};
   }
-`);
+`));
