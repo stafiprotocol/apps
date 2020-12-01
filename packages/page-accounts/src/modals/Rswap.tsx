@@ -126,6 +126,11 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
         <div className={className}>
           <Modal.Description>
             <p>
+              <span class="warn">
+              This is a beta version of rBridge, use it on your own risk. It is a one way bridge, you can swap native FIS to ERC20 FIS, it is not supportive to swap it back, two way bridge is under development.
+              </span>
+            </p>
+            <p>
             The bridge will charge a certain amout of FIS to cover the ETH gas fee paid by StaFi for sending ERC20 FIS to your ETH address. We will calulate the estimated fee based on the exchange rate of ETH gas charged and FIS token at the real time. Estimated fee will be deducted from your transfered account.
             </p>
           </Modal.Description>
@@ -259,6 +264,10 @@ export default React.memo(styled(Swap)`
 
   label.with-help {
     flex-basis: 10rem;
+  }
+
+  .warn {
+    color: #FF0000;
   }
 
 `);

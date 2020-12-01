@@ -456,7 +456,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
                   key='swap'
                   onClick={toggleSwap}
                 >
-                  {t('rBridge')}
+                  {t('rBridge beta')}
                 </Menu.Item>
               ),
               api.api.tx.identity?.setSubs && identity?.display && (

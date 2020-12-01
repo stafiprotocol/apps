@@ -21,6 +21,6 @@ export default function create (t: <T = string> (key: string, text: string, opti
     group: 'accounts',
     icon: 'star',
     name: 'rBridge',
-    text: t<string>('nav.rswap', 'rBridge', { ns: 'apps-routing' })
+    text: t<string>('nav.rswap', 'rBridge beta', { ns: 'apps-routing' })
   };
 }
