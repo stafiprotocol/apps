@@ -126,7 +126,7 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
         <div className={className}>
           <Modal.Description>
             <p>
-              <span class="warn">
+              <span className="warn">
               This is a beta version of rBridge, use it on your own risk. It is a one way bridge, you can swap native FIS to ERC20 FIS, it is not supportive to swap it back, two way bridge is under development.
               </span>
             </p>
