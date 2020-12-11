@@ -116,6 +116,12 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
     }
   }, []);
 
+  const clickSwapLink = () => {
+    if (ethAddressAvailable && recipientId) {
+      window.open('https://etherscan.io/token/0xef3a930e1ffffacd2fc13434ac81bd278b0ecc8d?a=' + recipientId);
+    }
+  };
+
   return (
     <Modal
       className='app--accounts-Modal'
@@ -126,12 +132,7 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
         <div className={className}>
           <Modal.Description>
             <p>
-              <span className="warn">
               This is a beta version of rBridge, use it on your own risk. It is a one way bridge, you can swap native FIS to ERC20 FIS, it is not supportive to swap it back, two way bridge is under development.
-              </span>
-            </p>
-            <p>
-            The bridge will charge a certain amout of FIS to cover the ETH gas fee paid by StaFi for sending ERC20 FIS to your ETH address. We will calulate the estimated fee based on the exchange rate of ETH gas charged and FIS token at the real time. Estimated fee will be deducted from your transfered account.
             </p>
           </Modal.Description>
           <Modal.Columns>
@@ -200,7 +201,7 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
               </Static>
             </Modal.Column>
             <Modal.Column>
-              <p>{t<string>('The estimated fees will be subtracted from the sender account.')}</p>
+              <p>{t<string>('The bridge will charge a certain amout of FIS to cover the ETH gas fee paid by StaFi for sending ERC20 FIS to your ETH address. We will calulate the estimated fee based on the exchange rate of ETH gas charged and FIS token at the real time. Estimated fee will be deducted from your transfered account.')}</p>
             </Modal.Column>
           </Modal.Columns>
           <Modal.Columns>
@@ -215,6 +216,22 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
             </Modal.Column>
             <Modal.Column>
               <p>{t<string>('Your ethereum address to receive ERC20 FIS.')}</p>
+            </Modal.Column>
+          </Modal.Columns>
+
+          <Modal.Columns>
+            <Modal.Column>
+              <p>
+                <span className="swap-link">
+                  {t<string>('Click on this ')}
+                </span>
+                <span className="link" onClick={clickSwapLink}>
+                  {t<string>('link')}
+                </span>
+                <span>
+                  {t<string>(' to check your swap status.')}
+                </span>
+              </p>
             </Modal.Column>
           </Modal.Columns>
         </div>
@@ -266,8 +283,14 @@ export default React.memo(styled(Swap)`
     flex-basis: 10rem;
   }
 
-  .warn {
-    color: #FF0000;
+  .swap-link {
+    margin-left: 2rem;
+  }
+
+  .link {
+    cursor: pointer;
+    color: #00F3AB;
+    text-decoration: underline;
   }
 
 `);
