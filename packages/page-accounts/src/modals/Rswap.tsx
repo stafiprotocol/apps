@@ -85,6 +85,7 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
   const [ethValue, setEthValue] = useState<string | null>('0');
   const [hasAvailable] = useState(true);
   const [ethAddressAvailable, setEthAddressAvailable] = useState(false);
+  // const [ethLinkAvailable, setEthLinkAvailable] = useState(false);
   const [recipientId, setRecipientId] = useState<string | null>(null);
   const [senderId, setSenderId] = useState<string | null>(propSenderId || null);
 
@@ -222,15 +223,21 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
           <Modal.Columns>
             <Modal.Column>
               <p>
-                <span className="swap-link">
-                  {t<string>('Click on this ')}
-                </span>
-                <span className="link" onClick={clickSwapLink}>
-                  {t<string>('link')}
-                </span>
-                <span>
-                  {t<string>(' to check your swap status.')}
-                </span>
+                {
+                  ethAddressAvailable ? (
+                  <span>
+                    <span className="swap-link">
+                      {t<string>('Click on this ')}
+                    </span>
+                    <span className="link" onClick={clickSwapLink}>
+                      {t<string>('link')}
+                    </span>
+                    <span>
+                      {t<string>(' to check your swap status.')}
+                    </span>
+                  </span>
+                  ) : null
+                }
               </p>
             </Modal.Column>
           </Modal.Columns>
