@@ -17,5 +17,18 @@ export default {
     _enum: [
       'RFIS'
     ]
+  },
+  ProposalStatus: {
+    _enum: [
+      'Active',
+      'Passed',
+      'Expired',
+      'Executed'
+    ]
+  },
+  ProposalVotes: {
+      voted: 'Vec<AccountId>',
+      status: 'ProposalStatus',
+      expiry: 'BlockNumber'
   }
 };
