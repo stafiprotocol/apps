@@ -1,4 +1,4 @@
-// Copyright 2017-2020 @polkadot/app-staking authors & contributors
+// Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveSessionIndexes } from '@polkadot/api-derive/types';
@@ -6,6 +6,7 @@ import type { Option } from '@polkadot/types';
 import type { EraIndex, Exposure, Nominations, SlashingSpans } from '@polkadot/types/interfaces';
 
 import { useEffect, useState } from 'react';
+
 import { ApiPromise } from '@polkadot/api';
 import { useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
 

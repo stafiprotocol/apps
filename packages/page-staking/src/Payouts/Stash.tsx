@@ -1,4 +1,4 @@
-// Copyright 2017-2020 @polkadot/app-staking authors & contributors
+// Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
@@ -7,14 +7,15 @@ import type { PayoutStash } from './types';
 
 import BN from 'bn.js';
 import React, { useEffect, useState } from 'react';
+
 import { ApiPromise } from '@polkadot/api';
 import { AddressSmall, TxButton } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 import { BlockToTime, FormatBalance } from '@polkadot/react-query';
 
 import { useTranslation } from '../translate';
-import { createErasString } from './util';
 import useEraBlocks from './useEraBlocks';
+import { createErasString } from './util';
 
 interface Props {
   className?: string;

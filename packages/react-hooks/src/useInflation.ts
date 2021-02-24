@@ -1,39 +1,21 @@
-// Copyright 2017-2020 @polkadot/react-hooks authors & contributors
+// Copyright 2017-2021 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
+
+import type { ApiPromise } from '@polkadot/api';
+import type { Inflation } from './types';
 
 import BN from 'bn.js';
 import { useEffect, useState } from 'react';
-import { KUSAMA_GENESIS, POLKADOT_GENESIS } from '@polkadot/apps-config';
+
+import { getInflationParams } from '@polkadot/apps-config';
+import { BN_MILLION } from '@polkadot/util';
 
 import { useApi } from './useApi';
 import { useCall } from './useCall';
 
-interface Config {
-  falloff: number;
-  idealStake: number;
-  maxInflation: number;
-  minInflation: number;
-}
-
-interface State {
-  inflation: number;
-  stakedReturn: number;
-}
-
-const DEFAULT_CONFIG: Config = {
-  falloff: 0.05,
-  idealStake: 0.5,
-  maxInflation: 0.1,
-  minInflation: 0.025
-};
-
-const KNOWN_CONFIG: Record<string, Config> = {
-  [KUSAMA_GENESIS]: { ...DEFAULT_CONFIG, idealStake: 0.75 },
-  [POLKADOT_GENESIS]: { ...DEFAULT_CONFIG, idealStake: 0.75 }
-};
-
-function getInflation ({ falloff, idealStake, maxInflation, minInflation }: Config = DEFAULT_CONFIG, totalStaked: BN, totalIssuance: BN): State {
-  const stakedFraction = totalStaked.muln(1_000_000).div(totalIssuance).toNumber() / 1_000_000;
+export function calcInflation (api: ApiPromise, totalStaked: BN, totalIssuance: BN): Inflation {
+  const { falloff, idealStake, maxInflation, minInflation } = getInflationParams(api);
+  const stakedFraction = totalStaked.mul(BN_MILLION).div(totalIssuance).toNumber() / BN_MILLION.toNumber();
   const idealInterest = maxInflation / idealStake;
   const inflation = 100 * (minInflation + (
     stakedFraction <= idealStake
@@ -47,14 +29,14 @@ function getInflation ({ falloff, idealStake, maxInflation, minInflation }: Conf
   };
 }
 
-export function useInflation (totalStaked?: BN): State {
+export function useInflation (totalStaked?: BN): Inflation {
   const { api } = useApi();
   const totalIssuance = useCall<BN>(api.query.balances.totalIssuance);
-  const [state, setState] = useState<State>({ inflation: 0, stakedReturn: 0 });
+  const [state, setState] = useState<Inflation>({ inflation: 0, stakedReturn: 0 });
 
   useEffect((): void => {
     totalIssuance && totalStaked && setState(
-      getInflation(KNOWN_CONFIG[api.genesisHash.toHex()], totalStaked, totalIssuance)
+      calcInflation(api, totalStaked, totalIssuance)
     );
   }, [api, totalIssuance, totalStaked]);
 
