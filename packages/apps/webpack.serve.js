@@ -14,6 +14,7 @@ module.exports = merge(
     devServer: {
       open: false,
       port: 3006,
+      historyApiFallback: true,
       static: path.resolve(__dirname, 'build')
     },
     plugins: [
