@@ -654,6 +654,7 @@ export default React.memo(styled(Account)`
     width: 100%;
     min-height: 1.5rem;
   }
+
   .devBadge {
     opacity: 0.65;
   }
