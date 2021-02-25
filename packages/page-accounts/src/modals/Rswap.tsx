@@ -254,7 +254,7 @@ function Swap ({ className = '', onClose, senderId: propSenderId }: Props): Reac
             [amount, recipientId, ethChainId]
           }
           tx={
-              'bridgeSwap.transferNative'
+            api.tx.bridgeSwap.transferNative
           }
         />
       </Modal.Actions>
