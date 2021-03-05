@@ -36,63 +36,67 @@ const definitions: OverrideBundleDefinition = {
           ]
         },
         ProposalVotes: {
-            voted: 'Vec<AccountId>',
-            status: 'ProposalStatus',
-            expiry: 'BlockNumber'
+          voted: 'Vec<AccountId>',
+          status: 'ProposalStatus',
+          expiry: 'BlockNumber'
         },
-        ChainEra: 'u32',
         BondKey: {
           symbol: 'RSymbol',
           bond_id: 'H256'
         },
         BondRecord: {
-            bonder: 'AccountId',
-            symbol: 'RSymbol',
-            era: 'u32',
-            pubkey: 'Vec<u8>',
-            pool: 'Vec<u8>',
-            blockhash: 'Vec<u8>',
-            txhash: 'Vec<u8>',
-            amount: 'u128'
+          bonder: 'AccountId',
+          symbol: 'RSymbol',
+          pubkey: 'Vec<u8>',
+          pool: 'Vec<u8>',
+          blockhash: 'Vec<u8>',
+          txhash: 'Vec<u8>',
+          amount: 'u128'
         },
         BondReason: {
-            _enum: [
-                'Pass',
-                'BlockhashUnmatch',
-                'TxhashUnmatch',
-                'PubkeyUnmatch',
-                'PoolUnmatch',
-                'AmountUnmatch'
-            ]
+          _enum: [
+            'Pass',
+            'BlockhashUnmatch',
+            'TxhashUnmatch',
+            'PubkeyUnmatch',
+            'PoolUnmatch',
+            'AmountUnmatch'
+          ]
+        },
+        SigVerifyResult: {
+          _enum: [
+            'InvalidPubkey',
+            'Fail',
+            'Pass'
+          ]
         },
         LinkChunk: {
-            pool: 'Vec<u8>',
-            bond_value: 'u128',
-            unbond_value: 'u128'
+          bond: 'u128',
+          unbond: 'u128'
         },
         BondUnlockChunk: {
-            value: 'u128',
-            era: 'u32'
+          value: 'u128',
+          era: 'u32'
         },
         WithdrawChunk: {
-            who: 'AccountId',
-            recipient: 'Vec<u8>',
-            value: 'u128',
-            pool: 'Vec<u8>'
+          who: 'AccountId',
+          pool: 'Vec<u8>',
+          recipient: 'Vec<u8>',
+          value: 'u128'
         },
         RproposalStatus: {
-            _enum: [
-                'Initiated',
-                'Approved',
-                'Rejected',
-                'Expired'
-            ]
+          _enum: [
+            'Initiated',
+            'Approved',
+            'Rejected',
+            'Expired'
+          ]
         },
         RproposalVotes: {
-            votes_for: 'Vec<AccountId>',
-            votes_against: 'Vec<AccountId>',
-            status: 'RproposalStatus',
-            expiry: 'BlockNumber'
+          votes_for: 'Vec<AccountId>',
+          votes_against: 'Vec<AccountId>',
+          status: 'RproposalStatus',
+          expiry: 'BlockNumber'
         }
       }
     }
