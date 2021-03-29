@@ -24,7 +24,8 @@ const definitions: OverrideBundleDefinition = {
           _enum: [
             'RFIS',
             'RDOT',
-            'RKSM'
+            'RKSM',
+            'RATOM'
           ]
         },
         ProposalStatus: {
@@ -63,6 +64,13 @@ const definitions: OverrideBundleDefinition = {
             'AmountUnmatch'
           ]
         },
+        BondState: {
+          _enum: [
+            'Dealing',
+            'Fail',
+            'Success'
+          ]
+        },
         SigVerifyResult: {
           _enum: [
             'InvalidPubkey',
@@ -70,19 +78,38 @@ const definitions: OverrideBundleDefinition = {
             'Pass'
           ]
         },
+        BondSnapshot: {
+          symbol: 'RSymbol',
+          era: 'u32',
+          pool: 'Vec<u8>',
+          bond: 'u128',
+          unbond: 'u128',
+          active: 'u128',
+          last_voter: 'AccountId'
+        },
         LinkChunk: {
           bond: 'u128',
-          unbond: 'u128'
+          unbond: 'u128',
+          active: 'u128'
         },
-        BondUnlockChunk: {
-          value: 'u128',
-          era: 'u32'
+        OriginalTxType: {
+          _enum: [
+            'Transfer',
+            'Bond',
+            'Unbond',
+            'WithdrawUnbond',
+            'ClaimRewards'
+          ]
         },
-        WithdrawChunk: {
+        Unbonding: {
           who: 'AccountId',
+          symbol: 'RSymbol',
           pool: 'Vec<u8>',
-          recipient: 'Vec<u8>',
-          value: 'u128'
+          rvalue: 'u128',
+          value: 'u128',
+          current_era: 'u32',
+          unlock_era: 'u32',
+          recipient: 'AccountId'
         },
         RproposalStatus: {
           _enum: [
