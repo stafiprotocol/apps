@@ -78,6 +78,16 @@ const definitions: OverrideBundleDefinition = {
             'Pass'
           ]
         },
+        PoolBondState: {
+          _enum: [
+            'EraUpdated',
+            'BondReported',
+            'ActiveReported',
+            'WithdrawSkipped',
+            'WithdrawReported',
+            'TransferReported'
+          ]
+        },
         BondSnapshot: {
           symbol: 'RSymbol',
           era: 'u32',
@@ -85,7 +95,8 @@ const definitions: OverrideBundleDefinition = {
           bond: 'u128',
           unbond: 'u128',
           active: 'u128',
-          last_voter: 'AccountId'
+          last_voter: 'AccountId',
+          bond_state: 'PoolBondState'
         },
         LinkChunk: {
           bond: 'u128',
