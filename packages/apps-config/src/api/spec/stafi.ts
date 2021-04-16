@@ -49,10 +49,6 @@ const definitions: OverrideBundleDefinition = {
           status: 'ProposalStatus',
           expiry: 'BlockNumber'
         },
-        BondKey: {
-          symbol: 'RSymbol',
-          bond_id: 'H256'
-        },
         BondRecord: {
           bonder: 'AccountId',
           symbol: 'RSymbol',
