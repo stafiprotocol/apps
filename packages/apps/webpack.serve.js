@@ -19,7 +19,7 @@ module.exports = merge(
     },
     plugins: [
       new HtmlWebpackPlugin({
-        PAGE_TITLE: 'Stafi Portal',
+        PAGE_TITLE: 'StaFi portal',
         inject: true,
         template: path.join(__dirname, 'public/index.html')
       }),
