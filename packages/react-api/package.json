@@ -1,23 +1,13 @@
 {
   "name": "@polkadot/react-api",
-  "version": "0.81.2-8",
-  "description": "A collection of RxJs React components the Polkadot JS API",
-  "main": "index.js",
-  "author": "Jaco Greeff <jacogr@gmail.com>",
-  "maintainers": [],
-  "contributors": [],
+  "private": true,
+  "version": "0.89.2-3",
   "license": "Apache-2.0",
-  "engines": {
-    "node": ">=8.0"
-  },
-  "repository": "github:polkadot-js/apps",
-  "bugs": "https://github.com/polkadot-js/apps/issues",
-  "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/react-api#readme",
   "dependencies": {
-    "@babel/runtime": "^7.12.5",
-    "@polkadot/api": "^3.10.2",
-    "@polkadot/extension-dapp": "^0.37.2-0",
-    "@polkadot/x-rxjs": "^5.7.1",
-    "fflate": "^0.6.1"
+    "@babel/runtime": "^7.13.17",
+    "@polkadot/api": "^4.7.2",
+    "@polkadot/extension-dapp": "^0.37.3-17",
+    "@polkadot/x-rxjs": "^6.3.1",
+    "fflate": "^0.6.9"
   }
 }
