@@ -21,7 +21,6 @@ import membership from './membership';
 import parachains from './parachains';
 import poll from './poll';
 import rpc from './rpc';
-import rswap from './rswap';
 import settings from './settings';
 import signing from './signing';
 import society from './society';
@@ -38,7 +37,7 @@ export default function create (t: TFunction): Routes {
     addresses(t),
     explorer(t),
     // claims(t),
-    rswap(t),
+    // rswap(t),
     poll(t),
     transfer(t),
     staking(t),

@@ -31,7 +31,6 @@ import MultisigApprove from '../modals/MultisigApprove';
 import ProxyOverview from '../modals/ProxyOverview';
 import RecoverAccount from '../modals/RecoverAccount';
 import RecoverSetup from '../modals/RecoverSetup';
-import Swap from '../modals/Rswap';
 import Transfer from '../modals/Transfer';
 import UndelegateModal from '../modals/Undelegate';
 import { useTranslation } from '../translate';
@@ -113,7 +112,6 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const [isRecoverAccountOpen, toggleRecoverAccount] = useToggle();
   const [isRecoverSetupOpen, toggleRecoverSetup] = useToggle();
   const [isSettingsOpen, toggleSettings] = useToggle();
-  const [isSwapOpen, toggleSwap] = useToggle();
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isDelegateOpen, toggleDelegate] = useToggle();
   const [isUndelegateOpen, toggleUndelegate] = useToggle();
@@ -241,16 +239,6 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={_vestingVest}
         >
           {t('Unlock vested amount')}
-        </Menu.Item>
-      )
-    ]),
-    createMenuGroup('swapGroup', [
-      api.api.tx.bridgeSwap?.transferNative && (
-        <Menu.Item
-          key='swap'
-          onClick={toggleSwap}
-        >
-          {t('rBridge beta')}
         </Menu.Item>
       )
     ]),
@@ -528,13 +516,6 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
             address={address}
             key='modal-change-pass'
             onClose={togglePassword}
-          />
-        )}
-        {isSwapOpen && (
-          <Swap
-            key='modal-swap'
-            onClose={toggleSwap}
-            senderId={address}
           />
         )}
         {isTransferOpen && (
