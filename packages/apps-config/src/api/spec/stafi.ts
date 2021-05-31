@@ -12,11 +12,18 @@ const definitions: OverrideBundleDefinition = {
       // on all versions
       minmax: [0, undefined],
       types: {
+        Address: 'IndicesLookupSource',
+        LookupSource: 'IndicesLookupSource',
         RefCount: 'u32',
         ChainId: 'u8',
         ResourceId: '[u8; 32]',
         DepositNonce: 'u64',
         RateType: 'u64',
+        AccountInfo: {
+          nonce: 'u32',
+          refcount: 'RefCount',
+          data: 'AccountData'
+        },
         AccountRData: {
           free: 'u128'
         },
