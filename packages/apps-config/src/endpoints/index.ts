@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { TFunction } from 'i18next';
-import type { LinkOption } from '../settings/types';
+import type { LinkOption } from './types';
 
 import { createCustom, createDev, createOwn } from './development';
 import { createProduction } from './production';
@@ -10,8 +10,7 @@ import { createTesting } from './testing';
 
 export { CUSTOM_ENDPOINT_KEY } from './development';
 
-
-export function createWsEndpoints (t: TFunction): LinkOption[] {
+export function createWsEndpoints (t: TFunction, firstOnly?: boolean): LinkOption[] {
   return [
     ...createCustom(t),
     {
@@ -22,7 +21,7 @@ export function createWsEndpoints (t: TFunction): LinkOption[] {
       textBy: '',
       value: ''
     },
-    ...createProduction(t),
+    ...createProduction(t, firstOnly),
     {
       isDisabled: false,
       isHeader: true,
@@ -30,7 +29,7 @@ export function createWsEndpoints (t: TFunction): LinkOption[] {
       textBy: '',
       value: ''
     },
-    ...createTesting(t),
+    ...createTesting(t, firstOnly),
     {
       isDevelopment: true,
       isDisabled: false,

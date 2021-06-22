@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { TFunction } from 'i18next';
-import type { LinkOption } from '../settings/types';
+import type { LinkOption } from './types';
 
 import { expandEndpoints } from './util';
 
@@ -14,7 +14,7 @@ import { expandEndpoints } from './util';
 //   text: The text to display on the dropdown
 //   value: The actual hosted secure websocket endpoint
 
-export function createTesting (t: TFunction): LinkOption[] {
+export function createTesting (t: TFunction, firstOnly?: boolean): LinkOption[] {
   return expandEndpoints(t, [
     // alphabetical based on chain name, e.g. Amber, Arcadia, Beresheet, ...
     {
@@ -25,5 +25,5 @@ export function createTesting (t: TFunction): LinkOption[] {
         'Stafi Foundation': 'wss://stafi-seiya.stafi.io'
       }
     }
-  ]);
+  ], firstOnly);
 }

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { TFunction } from 'i18next';
-import type { LinkOption } from '../settings/types';
+import type { LinkOption } from './types';
 
 import { expandEndpoints } from './util';
 
@@ -15,7 +15,7 @@ import { expandEndpoints } from './util';
 //   value: The actual hosted secure websocket endpoint
 
 // alphabetical based on chain name
-export function createProduction (t: TFunction): LinkOption[] {
+export function createProduction (t: TFunction, firstOnly?: boolean): LinkOption[] {
   return expandEndpoints(t, [
     // fixed, polkadot
     {
@@ -26,5 +26,5 @@ export function createProduction (t: TFunction): LinkOption[] {
         'Stafi Foundation': 'wss://mainnet-rpc.stafi.io'
       }
     }
-  ]);
+  ], firstOnly);
 }
