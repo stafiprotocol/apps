@@ -33,7 +33,8 @@ const definitions: OverrideBundleDefinition = {
             'RDOT',
             'RKSM',
             'RATOM',
-            'RSOL'
+            'RSOL',
+            'RMATIC'
           ]
         },
         AccountXData: {
