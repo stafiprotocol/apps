@@ -149,6 +149,16 @@ const definitions: OverrideBundleDefinition = {
           votes_against: 'Vec<AccountId>',
           status: 'RproposalStatus',
           expiry: 'BlockNumber'
+        },
+        SwapTransactionInfo: {
+          account: 'AccountId',
+          receiver: 'Vec<u8>',
+          value: 'u128',
+          is_deal: 'bool'
+        },
+        SwapRate: {
+          lock_number: 'u64',
+          rate: 'u128'
         }
       }
     }
