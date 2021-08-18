@@ -34,7 +34,8 @@ const definitions: OverrideBundleDefinition = {
             'RKSM',
             'RATOM',
             'RSOL',
-            'RMATIC'
+            'RMATIC',
+            'RBNB'
           ]
         },
         AccountXData: {
@@ -159,6 +160,30 @@ const definitions: OverrideBundleDefinition = {
         SwapRate: {
           lock_number: 'u64',
           rate: 'u128'
+        },
+        BondAction: {
+          _enum: [
+            'BondOnly',
+            'UnbondOnly',
+            'BothBondUnbond',
+            'EitherBondUnbond'
+          ]
+        },
+        ClaimInfo: {
+          total_reward: 'Balance',
+          total_claimed: 'Balance',
+          latest_claimed_block: 'BlockNumber',
+          mint_block: 'BlockNumber'
+        },
+        MintRewardAct: {
+          begin: 'BlockNumber',
+          end: 'BlockNumber',
+          cycle: 'u32',
+          reward_rate: 'u128',
+          total_reward: 'Balance',
+          left_amount: 'Balance',
+          user_limit: 'Balance',
+          locked_blocks: 'u32'
         }
       }
     }
