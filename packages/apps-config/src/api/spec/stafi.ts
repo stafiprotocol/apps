@@ -170,6 +170,7 @@ const definitions: OverrideBundleDefinition = {
           ]
         },
         ClaimInfo: {
+          mint_amount: 'u128',
           total_reward: 'Balance',
           total_claimed: 'Balance',
           latest_claimed_block: 'BlockNumber',
