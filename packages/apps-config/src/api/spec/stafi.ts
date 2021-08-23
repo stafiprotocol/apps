@@ -171,6 +171,7 @@ const definitions: OverrideBundleDefinition = {
         },
         ClaimInfo: {
           mint_amount: 'u128',
+          native_token_amount: 'u128',
           total_reward: 'Balance',
           total_claimed: 'Balance',
           latest_claimed_block: 'BlockNumber',
@@ -184,7 +185,9 @@ const definitions: OverrideBundleDefinition = {
           total_reward: 'Balance',
           left_amount: 'Balance',
           user_limit: 'Balance',
-          locked_blocks: 'u32'
+          locked_blocks: 'u32',
+          total_rtoken_amount: 'u128',
+          total_native_token_amount: 'u128'
         }
       }
     }
