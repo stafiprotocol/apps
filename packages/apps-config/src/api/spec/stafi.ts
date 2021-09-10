@@ -166,7 +166,8 @@ const definitions: OverrideBundleDefinition = {
             'BondOnly',
             'UnbondOnly',
             'BothBondUnbond',
-            'EitherBondUnbond'
+            'EitherBondUnbond',
+            'InterDeduct'
           ]
         },
         ClaimInfo: {
