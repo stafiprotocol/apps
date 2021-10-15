@@ -22,11 +22,11 @@ export function createRococo (t: TFunction): EndpointOption {
     info: 'rococo',
     text: t('rpc.rococo', 'Rococo', { ns: 'apps-config' }),
     providers: {
-      Parity: 'wss://rococo-rpc.polkadot.io',
-      OnFinality: 'wss://rococo.api.onfinality.io/public-ws',
-      'Patract Elara': 'wss://rococo.elara.patract.io',
-      'Ares Protocol': 'wss://rococo.aresprotocol.com',
-      Pinknode: 'wss://rpc.pinknode.io/rococo/explorer'
+      Parity: 'wss://rococo-rpc.polkadot.io'
+      // OnFinality: 'wss://rococo.api.onfinality.io/public-ws', // After reset, node misses host functions
+      // 'Patract Elara': 'wss://pub.elara.patract.io/rococo', // After reset node is not available
+      // Pinknode: 'wss://rpc.pinknode.io/rococo/explorer' // After reset, syncs to old chain
+      // 'Ares Protocol': 'wss://rococo.aresprotocol.com' // https://github.com/polkadot-js/apps/issues/5767
     },
     linked: [
       // these are the base chains
@@ -182,6 +182,7 @@ export function createRococo (t: TFunction): EndpointOption {
       },
       {
         info: 'rococoGenshiro',
+        isDisabled: true, // Rococo reset
         paraId: 2021,
         text: t('rpc.rococo.genshiro', 'Genshiro', { ns: 'apps-config' }),
         providers: {
@@ -190,8 +191,9 @@ export function createRococo (t: TFunction): EndpointOption {
       },
       {
         info: 'rococoHalongbay',
+        isDisabled: true, // Rococo reset
         paraId: 2018,
-        text: t('rpc.rococo.halongbay', 'Halongbay', { ns: 'app-config' }),
+        text: t('rpc.rococo.halongbay', 'Halongbay', { ns: 'apps-config' }),
         providers: {
           Halongbay: 'wss://halongbay.polkafoundry.com'
         }
@@ -218,9 +220,18 @@ export function createRococo (t: TFunction): EndpointOption {
         info: 'rococoIntegritee',
         isDisabled: true, // Rococo reset
         paraId: 1983,
-        text: t('rpc.rococo.integritee', 'IntegriTEE PC1', { ns: 'apps-config' }),
+        text: t('rpc.rococo.integritee', 'Integritee PC1', { ns: 'apps-config' }),
         providers: {
           SCS: 'wss://rococo.integritee.network'
+        }
+      },
+      {
+        info: 'rococoInterBTC',
+        isDisabled: true, // Rococo reset
+        paraId: 2088,
+        text: t('rpc.rococo.interbtc', 'InterBTC PC1', { ns: 'apps-config' }),
+        providers: {
+          Interlay: 'wss://api-rococo.interlay.io/parachain'
         }
       },
       {
@@ -243,10 +254,20 @@ export function createRococo (t: TFunction): EndpointOption {
       },
       {
         info: 'rococoKylin',
+        isDisabled: true, // Rococo reset
         paraId: 2013,
         text: t('rpc.kylin-node.co.uk', 'Kylin Network', { ns: 'apps-config' }),
         providers: {
           'Kylin Network': 'wss://rpc.kylin-node.co.uk'
+        }
+      },
+      {
+        info: 'rococoSingLavender',
+        isDisabled: true, // Rococo reset
+        paraId: 2104,
+        text: t('rpc.rococo.singlavender', 'Lavender by SingNetwork', { ns: 'apps-config' }),
+        providers: {
+          SingNetwork: 'wss://rpc-lavender.singnetwork.io'
         }
       },
       {
@@ -256,6 +277,15 @@ export function createRococo (t: TFunction): EndpointOption {
         text: t('rpc.rocco.litentry', 'Litentry Rostock', { ns: 'apps-config' }),
         providers: {
           Litentry: 'wss://rococov1.litentry.io'
+        }
+      },
+      {
+        info: 'rococoLoomNetwork',
+        isDisabled: true, // Rococo reset
+        paraId: 2043,
+        text: t('rpc.rococo.loomnetwork', 'Loom Network', { ns: 'apps-config' }),
+        providers: {
+          LoomNetwork: 'wss://rococo.dappchains.com'
         }
       },
       {
@@ -296,10 +326,11 @@ export function createRococo (t: TFunction): EndpointOption {
       },
       {
         info: 'rococoOriginTrail',
-        paraId: 2024,
-        text: t('rpc.origintrail', 'OriginTrail Parachain', { ns: 'apps-config' }),
+        isDisabled: true, // Rococo reset
+        paraId: 2037,
+        text: t('rpc.rococo.origintrail', 'OriginTrail Parachain', { ns: 'apps-config' }),
         providers: {
-          'Trace Labs': 'wss://parachain-rpc.origin-trail.network'
+          'Trace Labs': 'wss://polkadot-js-second.origin-trail.network'
         }
       },
       {
@@ -348,15 +379,6 @@ export function createRococo (t: TFunction): EndpointOption {
         }
       },
       {
-        info: 'rococoPolkabtc',
-        isDisabled: true, // Rococo reset
-        paraId: 21,
-        text: t('rpc.rococo.polkabtc', 'PolkaBTC PC1', { ns: 'apps-config' }),
-        providers: {
-          Interlay: 'wss://rococo.polkabtc.io/api/parachain'
-        }
-      },
-      {
         info: 'rococoPolkaFoundry',
         isDisabled: true, // Rococo reset
         paraId: 1111,
@@ -381,6 +403,15 @@ export function createRococo (t: TFunction): EndpointOption {
         text: t('rpc.rococo.robonomics', 'Robonomics PC2', { ns: 'apps-config' }),
         providers: {
           Airalab: 'wss://rococo.parachain.robonomics.network'
+        }
+      },
+      {
+        info: 'rococoStandard',
+        isDisabled: true,
+        paraId: 2003,
+        text: t('rpc.rococo.standard', 'Standard', { ns: 'apps-config' }),
+        providers: {
+          'Standard Protocol': 'wss://rpc.rococo.standard.tech'
         }
       },
       {
@@ -421,6 +452,7 @@ export function createRococo (t: TFunction): EndpointOption {
       },
       {
         info: 'rococoVln',
+        isDisabled: true, // Rococo reset
         paraId: 2007,
         text: t('rpc.rococo.vln', 'Valibre Network PC', { ns: 'apps-config' }),
         providers: {
@@ -429,8 +461,8 @@ export function createRococo (t: TFunction): EndpointOption {
       },
       {
         info: 'rococoZeitgeist',
-        isDisabled: true, // Rococo reset
-        paraId: 9123,
+        isDisabled: true, // See https://github.com/polkadot-js/apps/issues/5842
+        paraId: 2050,
         text: t('rpc.rococo.zeitgeist', 'Zeitgeist PC', { ns: 'apps-config' }),
         providers: {
           Zeitgeist: 'wss://roc.zeitgeist.pm'

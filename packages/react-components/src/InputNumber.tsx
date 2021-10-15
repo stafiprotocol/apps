@@ -98,7 +98,7 @@ function isValidNumber (bn: BN, bitLength: BitLength, isZeroable: boolean, maxVa
     // cannot be negative
     bn.lt(BN_ZERO) ||
     // cannot be > than allowed max
-    !bn.lt(getGlobalMaxValue(bitLength)) ||
+    bn.gt(getGlobalMaxValue(bitLength)) ||
     // check if 0 and it should be a value
     (!isZeroable && bn.isZero()) ||
     // check that the bitlengths fit
@@ -292,10 +292,18 @@ function InputNumber ({ autoFocus, bitLength = DEFAULT_BITLENGTH, children, clas
     >
       {!!si && (
         <Dropdown
-          defaultValue={si.value}
+          defaultValue={
+            isDisabled && siDefault
+              ? siDefault.value
+              : si.value
+          }
           dropdownClassName='ui--SiDropdown'
           isButton
-          onChange={_onSelectSiUnit}
+          onChange={
+            isDisabled
+              ? undefined
+              : _onSelectSiUnit
+          }
           options={siOptions}
         />
       )}
@@ -308,7 +316,7 @@ export default React.memo(styled(InputNumber)`
   &.isDisabled {
     .ui--SiDropdown {
       background: transparent;
-      border-color: rgba(34, 36, 38, .15) !important;
+      border-color: var(--border-input) !important;
       border-style: dashed;
       color: #666 !important;
       cursor: default !important;

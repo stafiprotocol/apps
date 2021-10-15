@@ -7,7 +7,7 @@ import type { Campaign, LeasePeriod } from '../types';
 
 import React, { useMemo, useRef } from 'react';
 
-import { Table } from '@polkadot/react-components';
+import { MarkWarning, Table } from '@polkadot/react-components';
 import { useBestHash, useIsParasLinked } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../translate';
@@ -85,16 +85,19 @@ function Funds ({ bestNumber, className, leasePeriod, value }: Props): React.Rea
 
   return (
     <>
+      <MarkWarning
+        className='warning centered'
+        content={t<string>('Do not transfer any funds directly to a specific account that is associated with a loan or a team. Use the "Contribute" action to record the contribution on-chain using the crowdloan runtime module. When the fund is dissolved, after either the parachain lease expires or the loan ending without winning, the full value will be returned to your account by the runtime. Funds sent directly to an account, without using the crowdloan functionality, may not be returned by the receiving account.')}
+      />
       <Table
         className={className}
         empty={value && activeSorted && t<string>('No active campaigns found')}
         header={headerActiveRef.current}
       >
-        {activeSorted?.map((fund, index) => (
+        {activeSorted?.map((fund) => (
           <Fund
             bestHash={bestHash}
             bestNumber={bestNumber}
-            isOdd={!(index % 2)}
             isOngoing
             key={fund.accountId}
             value={fund}
@@ -106,10 +109,9 @@ function Funds ({ bestNumber, className, leasePeriod, value }: Props): React.Rea
         empty={value && endedSorted && t<string>('No completed campaigns found')}
         header={headedEndedRef.current}
       >
-        {endedSorted?.map((fund, index) => (
+        {endedSorted?.map((fund) => (
           <Fund
             bestNumber={bestNumber}
-            isOdd={!(index % 2)}
             key={fund.accountId}
             leasePeriod={leasePeriod}
             value={fund}

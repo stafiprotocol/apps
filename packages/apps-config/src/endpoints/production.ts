@@ -15,7 +15,7 @@ import { expandEndpoints } from './util';
 //   value: The actual hosted secure websocket endpoint
 
 // alphabetical based on chain name
-export function createProduction (t: TFunction, firstOnly?: boolean): LinkOption[] {
+export function createProduction (t: TFunction, firstOnly: boolean, withSort: boolean): LinkOption[] {
   return expandEndpoints(t, [
     // fixed, polkadot
     {
@@ -26,5 +26,5 @@ export function createProduction (t: TFunction, firstOnly?: boolean): LinkOption
         'Stafi Foundation': 'wss://mainnet-rpc.stafi.io'
       }
     }
-  ], firstOnly);
+  ], firstOnly, withSort);
 }

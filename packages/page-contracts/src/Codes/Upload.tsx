@@ -72,8 +72,8 @@ function Upload ({ onClose }: Props): React.ReactElement {
 
   useEffect((): void => {
     setWasm(
-      contractAbi && isWasm(contractAbi.project.source.wasm)
-        ? [contractAbi.project.source.wasm, true]
+      contractAbi && isWasm(contractAbi.info.source.wasm)
+        ? [contractAbi.info.source.wasm, true]
         : [null, false]
     );
   }, [contractAbi]);
@@ -131,7 +131,10 @@ function Upload ({ onClose }: Props): React.ReactElement {
   const invalidAbi = isAbiError || !isAbiSupplied;
 
   return (
-    <Modal header={t('Upload & deploy code {{info}}', { replace: { info: `${step}/2` } })}>
+    <Modal
+      header={t('Upload & deploy code {{info}}', { replace: { info: `${step}/2` } })}
+      onClose={onClose}
+    >
       <Modal.Content>
         {step === 1 && (
           <>
@@ -162,7 +165,7 @@ function Upload ({ onClose }: Props): React.ReactElement {
             />
             {!invalidAbi && contractAbi && (
               <>
-                {!contractAbi.project.source.wasm.length && (
+                {!contractAbi.info.source.wasm.length && (
                   <InputFile
                     help={t<string>('The compiled WASM for the contract that you wish to deploy. Each unique code blob will be attached with a code hash that can be used to create new instances.')}
                     isError={!isWasmValid}
@@ -212,7 +215,7 @@ function Upload ({ onClose }: Props): React.ReactElement {
           </>
         )}
       </Modal.Content>
-      <Modal.Actions onCancel={onClose}>
+      <Modal.Actions>
         {step === 1
           ? (
             <Button

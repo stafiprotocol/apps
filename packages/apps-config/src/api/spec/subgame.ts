@@ -14,8 +14,6 @@ const definitions: OverrideBundleDefinition = {
       types: {
         GameIndex: 'u32',
         GameMode: 'u8',
-        CommodityId: 'u128',
-        CommodityInfo: 'Vec<u8>',
         CommodityLimit: 'u128',
         UserCommodityLimit: 'u64',
         ChipBalance: 'u128',
@@ -47,7 +45,78 @@ const definitions: OverrideBundleDefinition = {
           game_over: 'bool'
         },
         GameInstanceId: 'u32',
-        AccountInfo: 'AccountInfoWithDualRefCount'
+        AccountInfo: 'AccountInfoWithDualRefCount',
+        SubGameAssetMetadata: {
+          deposit: 'DepositBalance',
+          name: 'Vec<u8>',
+          symbol: 'Vec<u8>',
+          decimals: 'u8'
+        },
+        SubGameAssetDetails: {
+          owner: 'AccountId',
+          issuer: 'AccountId',
+          admin: 'AccountId',
+          freezer: 'AccountId',
+          supply: 'u64',
+          deposit: 'DepositBalance',
+          max_zombies: 'u32',
+          min_balance: 'u64',
+          zombies: 'u32',
+          accounts: 'u32',
+          isFrozen: 'bool'
+        },
+        SusGameAssetBalance: {
+          balance: 'u64',
+          isFrozen: 'bool',
+          isZombie: 'bool'
+        },
+        SGAssetBalance: 'u64',
+        CommodityId: 'Hash',
+        Commodity: {
+          id: 'CommodityId',
+          info: 'Vec<u8>'
+        },
+        ProgramId: 'u64',
+        Program: {
+          program_id: 'ProgramId',
+          stake_amount: 'u128',
+          valid_day_count: 'u64'
+        },
+        PalletId: 'u64',
+        PalletInfo: {
+          pallet_id: 'PalletId',
+          name: 'Vec<u8>'
+        },
+        NftId: 'Hash',
+        LeaseInfo: {
+          pallet_id: 'PalletId',
+          nft_id: 'NftId'
+        },
+        StakeInfo: {
+          pallet_id: 'PalletId',
+          program_id: 'ProgramId',
+          stake_amount: 'Balance',
+          expires_at: 'Moment',
+          nft_id: 'NftId'
+        },
+        Moment: 'u64',
+        MomentOf: 'Moment',
+        SwapId: 'u32',
+        SwapSender: 'AccountId',
+        SwapPoolOwner: 'AccountId',
+        SwapAssetX: 'u32',
+        SwapAssetY: 'u32',
+        SwapAmountX: 'u64',
+        SwapAmountY: 'u64',
+        SwapAmountLP: 'u64',
+        SwapPoolDetails: {
+          swap_id: 'u32',
+          account: 'AccountId',
+          asset_a: 'u32',
+          asset_b: 'u32',
+          asset_lp: 'u32',
+          swap_k: 'u128'
+        }
       }
     }
   ]
