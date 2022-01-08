@@ -16083,44 +16083,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"polkadot-apps@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "polkadot-apps@workspace:."
-  dependencies:
-    "@babel/core": ^7.16.7
-    "@babel/register": ^7.16.7
-    "@babel/runtime": ^7.16.7
-    "@crustio/crust-pin": ^1.0.0
-    "@pinata/sdk": ^1.1.23
-    "@polkadot/dev": ^0.65.21
-    "@types/bn.js": ^4.11.6
-    "@types/chart.js": ^2.9.35
-    "@types/file-saver": ^2.0.4
-    "@types/jest": ^27.4.0
-    "@types/react-beautiful-dnd": ^13.1.2
-    "@types/react-copy-to-clipboard": ^5.0.2
-    "@types/react-dom": ^17.0.11
-    "@types/react-router-dom": ^5.3.2
-    "@types/store": ^2.0.2
-    "@types/styled-components": ^5.1.19
-    "@types/styled-theming": ^2.2.5
-    concurrently: ^7.0.0
-    devtron: ^1.4.0
-    dnslink-cloudflare: ^3.0.0
-    electron: ^12.2.3
-    electron-builder: 22.14.12
-    electron-builder-notarize: ^1.2.0
-    i18next-scanner: ^3.1.0
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-is: ^17.0.2
-    source-map-explorer: ^2.5.2
-    styled-components: ^5.3.3
-    webpack: ^5.65.0
-    webpack-cli: ^4.9.1
-  languageName: unknown
-  linkType: soft
-
 "pontem-types-bundle@npm:1.0.15":
   version: 1.0.15
   resolution: "pontem-types-bundle@npm:1.0.15"
@@ -18575,6 +18537,44 @@ resolve@^2.0.0-next.3:
   checksum: c86ac08f58d1a9bce3f17946cb2f18268f55f8180f5396ae147deecb4d23cd54f3d27e4a8d3227d525b0f0c89b7f7e839e223851a577136a763ccd7e488440be
   languageName: node
   linkType: hard
+
+"stafi-apps@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "stafi-apps@workspace:."
+  dependencies:
+    "@babel/core": ^7.16.7
+    "@babel/register": ^7.16.7
+    "@babel/runtime": ^7.16.7
+    "@crustio/crust-pin": ^1.0.0
+    "@pinata/sdk": ^1.1.23
+    "@polkadot/dev": ^0.65.21
+    "@types/bn.js": ^4.11.6
+    "@types/chart.js": ^2.9.35
+    "@types/file-saver": ^2.0.4
+    "@types/jest": ^27.4.0
+    "@types/react-beautiful-dnd": ^13.1.2
+    "@types/react-copy-to-clipboard": ^5.0.2
+    "@types/react-dom": ^17.0.11
+    "@types/react-router-dom": ^5.3.2
+    "@types/store": ^2.0.2
+    "@types/styled-components": ^5.1.19
+    "@types/styled-theming": ^2.2.5
+    concurrently: ^7.0.0
+    devtron: ^1.4.0
+    dnslink-cloudflare: ^3.0.0
+    electron: ^12.2.3
+    electron-builder: 22.14.12
+    electron-builder-notarize: ^1.2.0
+    i18next-scanner: ^3.1.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-is: ^17.0.2
+    source-map-explorer: ^2.5.2
+    styled-components: ^5.3.3
+    webpack: ^5.65.0
+    webpack-cli: ^4.9.1
+  languageName: unknown
+  linkType: soft
 
 "stat-mode@npm:^1.0.0":
   version: 1.0.0
