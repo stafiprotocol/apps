@@ -12,6 +12,8 @@ function getGenesis (name: string): string {
   return network.genesisHash[0];
 }
 
+export const STAFI_GENESIS = getGenesis('stafi');
+
 export const KULUPU_GENESIS = getGenesis('kulupu');
 
 export const KUSAMA_GENESIS = getGenesis('kusama');
