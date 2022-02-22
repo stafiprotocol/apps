@@ -3,7 +3,7 @@
 
 import type { ApiPromise } from '@polkadot/api';
 
-import { DOCK_POS_TESTNET_GENESIS, KUSAMA_GENESIS, NEATCOIN_GENESIS, NFTMART_GENESIS, POLKADOT_GENESIS, STAFI_GENESIS } from '../constants';
+import { DOCK_POS_TESTNET_GENESIS, KUSAMA_GENESIS, NEATCOIN_GENESIS, NFTMART_GENESIS, POLKADOT_GENESIS, STAFI_GENESIS, STAFI_TESTNET_GENESIS } from '../constants';
 
 interface InflationParams {
   auctionAdjust: number;
@@ -29,7 +29,8 @@ const KNOWN_PARAMS: Record<string, InflationParams> = {
   [NEATCOIN_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 },
   [NFTMART_GENESIS]: { ...DEFAULT_PARAMS, falloff: 0.04, stakeTarget: 0.60 },
   [POLKADOT_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 },
-  [STAFI_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 }
+  [STAFI_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 },
+  [STAFI_TESTNET_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 }
 };
 
 export function getInflationParams (api: ApiPromise): InflationParams {
