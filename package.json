@@ -1,7 +1,7 @@
 {
-  "author": "Stafi Technologies <technical@stafi.io>",
+  "author": "StaFi Technologies <technical@stafi.io>",
   "bugs": "https://github.com/stafiprotocol/apps/issues",
-  "description": "An Apps portal into the Stafi network",
+  "description": "An Apps portal into the StaFi network",
   "homepage": "https://github.com/stafiprotocol/apps#readme",
   "license": "Apache-2",
   "name": "stafi-apps",

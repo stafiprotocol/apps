@@ -24,10 +24,7 @@ const DEFAULT_PARAMS: InflationParams = {
 };
 
 const KNOWN_PARAMS: Record<string, InflationParams> = {
-  [DOCK_POS_TESTNET_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 },
   [KUSAMA_GENESIS]: { ...DEFAULT_PARAMS, auctionAdjust: (0.3 / 60), auctionMax: 60, stakeTarget: 0.75 },
-  [NEATCOIN_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 },
-  [NFTMART_GENESIS]: { ...DEFAULT_PARAMS, falloff: 0.04, stakeTarget: 0.60 },
   [POLKADOT_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 },
   [STAFI_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 },
   [STAFI_TESTNET_GENESIS]: { ...DEFAULT_PARAMS, stakeTarget: 0.75 }
